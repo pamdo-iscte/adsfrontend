@@ -1,7 +1,9 @@
 
 import '../../src/App.css';
 import {useState} from "react";
+
 import { useNavigate } from 'react-router-dom';
+import Calendar from "./Calendar";
 function Home() {
     const [aluno, setAluno] = useState(false);
     const [professor, setProfessor] = useState(false);
@@ -11,9 +13,11 @@ function Home() {
     const [doutaremento, setDoutaremento] = useState(false);
     const [cursos, setCurso] = useState("")
 
+
     const [sv, setSV] = useState(false);
 
     const setAlunoTrue = () => {
+        navigate('/schedule')
         setAluno(true)
         setProfessor(false)
         setSV(false)
@@ -30,13 +34,12 @@ function Home() {
         setMestrado(false)
         setDoutaremento(false)
     }
-    const [posts, setPosts] = useState([]);
 
     const teste = () => {
-        fetch("/cenas")
-            .then((res) => res.json())
-            .then((data) => console.log(data));
-
+        //fetch("/lei")
+          //  .then((res) => res.json())
+           // .then((data) => console.log(data));
+        navigate('/testes')
     }
 
     const setSVTrue = () => {
@@ -73,7 +76,7 @@ function Home() {
                 Novo Fenix
             </header>
 
-            <body className="mx-auto w-[1024px] pt-[8rem]">
+            <body className="mx-auto w-[1024px] pt-[8rem] px-5">
             <h1 className="text-center font-bold text-[24px]">Iniciar Sessão</h1>
             <h1 className="text-center mt-[20px] font-medium">Sou:</h1>
             <div className="mt-[30px] flex flex-row  flex justify-center items-center ">
@@ -101,7 +104,6 @@ function Home() {
                 </div>
                 : ""}
             <button onClick={teste}>TESTE</button>
-            <h1>coco {posts}</h1>
             {licenciatura || mestrado ?  <div className="mt-[30px] text-center font-bold text-[24px] flex flex-col  flex justify-center items-center ">
                 <label htmlFor="countries" className="block mb-2 text-[18px] font-medium text-dark">Indique o seu curso:</label>
                 <select onChange={e => setCurso(e.target.value)} className="text-center ml-[20px] bg-gray-50 border border-gray-300 text-gray-900 text-[14px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[580px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -124,7 +126,7 @@ function Home() {
                     <option >Sociologia </option>
                 </select>
             </div>:""}
-
+<Calendar></Calendar>
             </body>
             <footer className="font-medium bg-blue-100 absolute mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
                 Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
