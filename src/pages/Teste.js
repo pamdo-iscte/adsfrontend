@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import { useNavigate } from 'react-router-dom';
@@ -23,9 +23,7 @@ function Horario() {
     useEffect(() => {
         fetchData()
             .then((res) => {
-                setProfessor(res.slice(0,100))
-                console.log(res[0])
-                handleChange()
+                setProfessor(res)
             })
             .catch((e) => {
                 console.log(e.message)
@@ -33,11 +31,7 @@ function Horario() {
     }, [])
 
     const handleChange = () => {
-        for(var i=0; i<100;i++){
-            if(professor[i].curso==="ME"){
-                console.log("AQUI")
-            }
-        }
+        console.log(workloadsTableRef.current.getSelectedData())
     };
 
     const columns = [
@@ -45,9 +39,9 @@ function Horario() {
         { title: "Unidade de execução", field: "unidade_de_execucao", headerFilter: "input" },
         { title: "Turno", field: "turno", headerFilter: "input" },
         { title: "Turma", field: "turma",  headerFilter: "input" },
-        { title: "Hora Inicial", field: "hora_inicio",   headerFilter: "input" },
+        { title: "Hora Inicial", field: "hora_inicio",  headerFilter: "input" },
         { title: "Hora Final", field: "hora_fim",  headerFilter: "input" },
-        { title: "Dia", field: "data",  headerFilter: "input" , },
+        { title: "Dia", field: "data",  headerFilter: "input", },
         { title: "Sala", field: "sala",   headerFilter: "input" },
     ];
     var data = [
@@ -58,16 +52,33 @@ function Horario() {
         {id:5, name:"Margret Marmajuke", age:"16", col:"yellow", dob:"31/01/1999"},
     ];
 
+    const workloadsTableOptions = {
+        pagination:"local",
+        paginationSize:10,
+        paginationSizeSelector:[10,15,20,25],
+        movableColumns:true,
+        paginationCounter:"rows",
+        rowContextMenu:"rowMenu",
+        paginationButtonCount:30,
+        groupBy:"data",
+        selectable:true,
+
+    };
+    let workloadsTableRef = useRef();
+
     return (
         <div>
             <header className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
                 Novo Fenix
             </header>
 
-            <body className="mx-auto w-[1024px] pt-[8rem]">
+            <body className="mx-auto w-[1440px] pt-[8rem]">
+            <h1 onClick={handleChange}>carrega me</h1>
             <ReactTabulator
                 data={professor}
                 columns={columns}
+                onRef={(r) => (workloadsTableRef = r)}
+                options={workloadsTableOptions}
 
             />
             </body>
