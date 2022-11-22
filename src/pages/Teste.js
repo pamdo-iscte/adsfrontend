@@ -54,13 +54,13 @@ function Horario() {
 
     const workloadsTableOptions = {
         pagination:"local",
-        paginationSize:10,
-        paginationSizeSelector:[10,15,20,25],
+        paginationSize:25,
+        paginationSizeSelector:[25,50,60],
         movableColumns:true,
         paginationCounter:"rows",
         rowContextMenu:"rowMenu",
         paginationButtonCount:30,
-        groupBy:"data",
+        groupBy:"unidade_de_execucao",
         selectable:true,
 
     };

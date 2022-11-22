@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "assets/calendar_weekly.css";
+@import "assets/nextclass.css";
 
 
 body {

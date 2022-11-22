@@ -5,6 +5,7 @@ import HomeScreen from './pages/Home'
 import ServicosAcademicos from './pages/ServiçosAcadémicos'
 import Horario from './pages/Horario'
 import Teste from './pages/Teste'
+import Raios from './pages/Raios'
 export default function App() {
   return (
       <Router>
@@ -14,6 +15,7 @@ export default function App() {
             <Route path="/academicservices" element={<ServicosAcademicos />} />
             <Route path="/schedule" element={<Horario />} />
             <Route path="/teste" element={<Teste />} />
+            <Route path="/raios" element={<Raios />} />
             <Route path="/*" element={<div>NOT FOUND</div>} />
 
         </Routes>
