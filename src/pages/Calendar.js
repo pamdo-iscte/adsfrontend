@@ -24,15 +24,13 @@ class Calendar extends Component {
             durationBarVisible: true,
             theme:"calendar_weekly",
             locale:"PT-PT"
-
-
-
         };
     }
 
     get calendar() {
         return this.calendarRef.current.control;
     }
+
 
     componentDidMount() {
 
@@ -68,11 +66,11 @@ class Calendar extends Component {
 
         const startDate = DayPilot.Date.today();
         this.calendar.update({startDate, events});
-
     }
 
     render() {
         return (
+
             <div style={styles.wrap}>
                 <div style={styles.left}>
                     <DayPilotNavigator

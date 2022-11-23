@@ -1,113 +1,112 @@
 import React, {Component} from 'react';
-import {DayPilot, DayPilotScheduler} from "@daypilot/daypilot-lite-react";
+import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
+import '../../src/App.css';
+const styles = {
+    wrap: {
+        display: "flex"
+    },
+    left: {
+        marginRight: "10px"
+    },
+    main: {
+        flexGrow: "1"
+    }
+};
+//https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
 
-class Scheduler extends Component {
-
+class Calendar extends Component {
+    getDate = () => {
+        let a=this.calendarRef.current.control.startDate.dayOfWeek()
+        let b=this.calendarRef.current.control.startDate.getDay()
+        console.log(a)
+        console.log(b)
+    }
     constructor(props) {
         super(props);
-
+        this.calendarRef = React.createRef();
         this.state = {
-            timeHeaders: [{"groupBy":"Month"},{"groupBy":"Day","format":"d"}],
-            scale: "Day",
-            days: 31,
-            startDate: "2021-07-01",
-            timeRangeSelectedHandling: "Enabled",
-            onTimeRangeSelected: async (args) => {
-                const dp = args.control;
-                const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
-                dp.clearSelection();
-                if (modal.canceled) { return; }
-                dp.events.add({
-                    start: args.start,
-                    end: args.end,
-                    id: DayPilot.guid(),
-                    resource: args.resource,
-                    text: modal.result
-                });
-            },
-            treeEnabled: true,
-            theme: "scheduler_default"
+            viewType: "Week",
+            durationBarVisible: true,
+            theme:"calendar_weekly",
+            locale:"PT-PT"
         };
+    }
+
+    get calendar() {
+        return this.calendarRef.current.control;
     }
 
     componentDidMount() {
 
-        // load resource and event data
-        this.setState({
-            resources: [
-                {name: "Group 1", id: "group-a", expanded: true, children: [
-                        {name: "Resource A", id: "A"},
-                        {name: "Resource B", id: "B"},
-                        {name: "Resource C", id: "C"},
-                        {name: "Resource D", id: "D"},
-                        {name: "Resource E", id: "E"},
-                        {name: "Resource F", id: "F"},
-                        {name: "Resource G", id: "G"}
-                    ]}
-            ],
-            events: [
-                {
-                    id: 1,
-                    text: "Event 1",
-                    start: "2021-07-02T00:00:00",
-                    end: "2021-07-05T00:00:00",
-                    resource: "A"
-                },
-                {
-                    id: 2,
-                    text: "Event 2",
-                    start: "2021-07-03T00:00:00",
-                    end: "2021-07-10T00:00:00",
-                    resource: "C",
-                    barColor: "#38761d",
-                    barBackColor: "#93c47d"
-                },
-                {
-                    id: 3,
-                    text: "Event 3",
-                    start: "2021-07-02T00:00:00",
-                    end: "2021-07-08T00:00:00",
-                    resource: "D",
-                    barColor: "#f1c232",
-                    barBackColor: "#f1c232"
-                },
-                {
-                    id: 4,
-                    text: "Event 3",
-                    start: "2021-07-02T00:00:00",
-                    end: "2021-07-08T00:00:00",
-                    resource: "E",
-                    barColor: "#cc0000",
-                    barBackColor: "#ea9999"
-                }
-            ]
-        });
+        const events = [
+            {
+                id: 1,
+                text: "Event 1",
+                start: "2023-03-07T10:30:00",
+                end: "2023-03-07T13:00:00"
+            },
+            {
+                id: 2,
+                text: "Event 2",
+                start: "2023-03-08T09:30:00",
+                end: "2023-03-08T11:30:00",
+                backColor: "#6aa84f"
+            },
+            {
+                id: 3,
+                text: "Event 3",
+                start: "2022-11-22T08:30:00",
+                end: "2022-11-22T13:00:00",
+                backColor: "#f1c232"
+            },
+            {
+                id: 4,
+                text: "Event 4 Semanas 1,2,3,4,5",
+                start: "2022-11-22T11:30:00",
+                end: "2022-11-22T13:00:00",
+                backColor: "#cc4125"
+            },
+        ];
 
+        const startDate = DayPilot.Date.today();
+        this.calendar.update({startDate, events});
     }
 
     render() {
-        var {...config} = this.state;
         return (
-            <div>
-                <div className={"space"}>
-                    <select onChange={ev => this.setState({theme: ev.target.value})}>
-                        <option value={"scheduler_default"}>Default</option>
-                        <option value={"scheduler_green"}>Green</option>
-                        <option value={"scheduler_white"}>White</option>
-                        <option value={"scheduler_transparent"}>Transparent</option>
-                        <option value={"scheduler_8"}>Theme 8</option>
-                    </select>
+
+            <div style={styles.wrap}>
+                <h1 onClick={this.getDate}>ola</h1>
+                <div style={styles.left}>
+                    <DayPilotNavigator
+                        selectMode={"week"}
+                        showMonths={2}
+                        skipMonths={2}
+                        locale="PT-PT"
+                        startDate={DayPilot.Date.today()}
+                        selectionDay={DayPilot.Date.today()}
+                        onTimeRangeSelected={ args => {
+                            this.calendar.update({
+                                startDate: args.day
+                            });
+                        }}
+                    />
                 </div>
-                <h1>OLA</h1>
-                <DayPilotScheduler
-                    {...config}
-                    ref={component => {
-                        this.scheduler = component && component.control;
-                    }}
-                />
+                <div style={styles.main}>
+                    <DayPilotCalendar
+                        {...this.state}
+                        headerDateFormat={"dddd"}
+                        timeFormat={"Clock24Hours"}
+                        eventMoveHandling ={"Disabled"}
+                        eventResizeHandling ={"Disabled"}
+                        timeRangeSelectedHandling ={"Disabled"}
+                        ref={this.calendarRef}
+
+                    />
+                </div>
             </div>
         );
     }
 }
 
-export default Scheduler;
+export default Calendar;
