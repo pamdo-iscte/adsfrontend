@@ -11,6 +11,7 @@ import { ReactTabulator } from 'react-tabulator';
 import React, {Component} from 'react';
 import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
 import '../../src/App.css';
+const ref1 = React.createRef();
 const styles = {
     wrap: {
         display: "flex"
@@ -22,6 +23,7 @@ const styles = {
         flexGrow: "1"
     }
 };
+
 //https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
 
 class Calendar extends Component {
@@ -31,6 +33,24 @@ class Calendar extends Component {
         console.log(a)
         console.log(b)
     }
+    addEvent=()=>{
+        console.log("AUI")
+        const event = {
+            id: 1,
+            text: "Event 1",
+            start: "2022-12-02T10:30:00",
+            end: "2022-12-02T13:00:00"
+        };
+        this.calendarRef.current.control.events.add(event)
+
+        this.calendar.events.add({
+            id: 1,
+            text: "Event 1",
+            start: "2022-12-03T10:30:00",
+            end: "2022-12-03T13:00:00"
+        })
+        this.calendar.update();
+    }
     constructor(props) {
         super(props);
         this.calendarRef = React.createRef();
@@ -38,7 +58,7 @@ class Calendar extends Component {
             viewType: "Week",
             durationBarVisible: true,
             theme:"calendar_weekly",
-            locale:"PT-PT",
+            locale:"PT-PT"
         };
     }
 
@@ -97,8 +117,11 @@ class Calendar extends Component {
                         selectionDay={DayPilot.Date.today()}
                         onTimeRangeSelected={ args => {
                             this.calendar.update({
-                                startDate: args.day
+                                startDate: args.day,
                             });
+                            this.getDate()
+                            this.addEvent()
+
                         }}
                     />
                 </div>
@@ -111,6 +134,7 @@ class Calendar extends Component {
                         eventResizeHandling ={"Disabled"}
                         timeRangeSelectedHandling ={"Disabled"}
                         ref={this.calendarRef}
+
 
                     />
                 </div>
@@ -143,7 +167,20 @@ function Horario() {
     }, [])
 
     const handleChange = () => {
-        console.log(workloadsTableRef.current.getSelectedData())
+        console.log(ref1.current.calendarRef.current.control.events)
+        ref1.current.calendarRef.current.control.events.add({
+                id: 1,
+                text: "Event 1",
+                start: "2022-12-03T10:30:00",
+                end: "2022-12-03T13:00:00"
+            })
+       // ref1.current.control.add({
+       //      id: 1,
+       //      text: "Event 1",
+       //      start: "2022-12-03T10:30:00",
+       //      end: "2022-12-03T13:00:00"
+       //  })
+       // console.log(workloadsTableRef.current.getSelectedData())
     };
 
     const columns = [
@@ -163,13 +200,33 @@ function Horario() {
         {id:4, name:"Brendon Philips", age:"125", col:"orange", dob:"01/08/1980"},
         {id:5, name:"Margret Marmajuke", age:"16", col:"yellow", dob:"31/01/1999"},
     ];
+    const handleRowClick = (e,row) => {
+        try {
+            console.log(row.getData().curso)
+            console.log("AUI")
+            const event = {
+                id: 4,
+                text: "Event 1",
+                start: "2022-12-02T10:30:00",
+                end: "2022-12-02T13:00:00"
+            };
+            new Calendar().addEvent()
+
+
+        }
+        catch (e) {
+
+        }
+        //console.log(workloadsTableRef.current.getSelectedData())
+    };
+
 
     const workloadsTableOptions = {
         pagination:"local",
         paginationSize:25,
         paginationSizeSelector:[25,50,60],
         movableColumns:true,
-        paginationCounter:"rows",
+        //paginationCounter:"rows",
         rowContextMenu:"rowMenu",
         paginationButtonCount:30,
         groupBy:"unidade_de_execucao",
@@ -184,17 +241,20 @@ function Horario() {
                 Novo Fenix
             </header>
 
-            <body className="mx-auto w-[1440px] pt-[8rem]">
+            <div className="mx-auto w-[1440px] pt-[8rem]">
             <h1 onClick={handleChange}>carrega me</h1>
             <ReactTabulator
                 data={professor}
                 columns={columns}
                 onRef={(r) => (workloadsTableRef = r)}
                 options={workloadsTableOptions}
+                events={{
+                    rowClick: handleRowClick,
+                }}
 
             />
-            <Calendar></Calendar>
-            </body>
+            <Calendar  ref={ref1}></Calendar>
+            </div>
             <footer className="font-medium bg-blue-100  mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
                 Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
                 por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho</footer>

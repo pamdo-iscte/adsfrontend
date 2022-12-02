@@ -21,6 +21,24 @@ class Calendar extends Component {
         console.log(a)
         console.log(b)
     }
+    addEvent=()=>{
+        console.log("AUI")
+        const event = {
+            id: 1,
+            text: "Event 1",
+            start: "2022-12-02T10:30:00",
+            end: "2022-12-02T13:00:00"
+        };
+        this.calendarRef.current.control.events.add(event)
+
+        this.calendar.events.add({
+            id: 1,
+            text: "Event 1",
+            start: "2022-12-03T10:30:00",
+            end: "2022-12-03T13:00:00"
+        })
+        this.calendar.update();
+    }
     constructor(props) {
         super(props);
         this.calendarRef = React.createRef();
@@ -76,7 +94,7 @@ class Calendar extends Component {
         return (
 
             <div style={styles.wrap}>
-                <h1 onClick={this.getDate}>ola</h1>
+                <h1 onClick={this.addEvent}>ola</h1>
                 <div style={styles.left}>
                     <DayPilotNavigator
                         selectMode={"week"}
@@ -87,8 +105,11 @@ class Calendar extends Component {
                         selectionDay={DayPilot.Date.today()}
                         onTimeRangeSelected={ args => {
                             this.calendar.update({
-                                startDate: args.day
+                                startDate: args.day,
                             });
+                            this.getDate()
+                            this.addEvent()
+
                         }}
                     />
                 </div>
@@ -101,6 +122,7 @@ class Calendar extends Component {
                         eventResizeHandling ={"Disabled"}
                         timeRangeSelectedHandling ={"Disabled"}
                         ref={this.calendarRef}
+
 
                     />
                 </div>

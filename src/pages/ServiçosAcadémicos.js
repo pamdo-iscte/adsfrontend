@@ -20,6 +20,7 @@ function ServiçosAcadémicos() {
         setSelectedOption(selectedOption);
     };
 
+
     const filterOptions = (candidate, input) => {
         if (input) {
             if (candidate.label.toLowerCase().includes(input.toLowerCase()))
