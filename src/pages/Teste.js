@@ -34,22 +34,23 @@ class Calendar extends Component {
         console.log(b)
     }
     addEvent=()=>{
-        console.log("AUI")
-        const event = {
-            id: 1,
-            text: "Event 1",
-            start: "2022-12-02T10:30:00",
-            end: "2022-12-02T13:00:00"
-        };
-        this.calendarRef.current.control.events.add(event)
-
-        this.calendar.events.add({
-            id: 1,
-            text: "Event 1",
-            start: "2022-12-03T10:30:00",
-            end: "2022-12-03T13:00:00"
-        })
-        this.calendar.update();
+        // console.log("AUI")
+        // const event = {
+        //     id: 1,
+        //     text: "Event 1",
+        //     text: "Event 1",
+        //     start: "2022-12-02T10:30:00",
+        //     end: "2022-12-02T13:00:00"
+        // };
+        // this.calendarRef.current.control.events.add(event)
+        //
+        // this.calendar.events.add({
+        //     id: 1,
+        //     text: "Event 1",
+        //     start: "2022-12-03T10:30:00",
+        //     end: "2022-12-03T13:00:00"
+        // })
+        // this.calendar.update();
     }
     constructor(props) {
         super(props);
@@ -69,33 +70,6 @@ class Calendar extends Component {
     componentDidMount() {
 
         const events = [
-            {
-                id: 1,
-                text: "Event 1",
-                start: "2023-03-07T10:30:00",
-                end: "2023-03-07T13:00:00"
-            },
-            {
-                id: 2,
-                text: "Event 2",
-                start: "2023-03-08T09:30:00",
-                end: "2023-03-08T11:30:00",
-                backColor: "#6aa84f"
-            },
-            {
-                id: 3,
-                text: "Event 3",
-                start: "2022-11-22T08:30:00",
-                end: "2022-11-22T13:00:00",
-                backColor: "#f1c232"
-            },
-            {
-                id: 4,
-                text: "Event 4 Semanas 1,2,3,4,5",
-                start: "2022-11-22T11:30:00",
-                end: "2022-11-22T13:00:00",
-                backColor: "#cc4125"
-            },
         ];
 
         const startDate = DayPilot.Date.today();
@@ -106,24 +80,23 @@ class Calendar extends Component {
         return (
 
             <div style={styles.wrap}>
-                <h1 onClick={this.getDate}>ola</h1>
                 <div style={styles.left}>
-                    <DayPilotNavigator
-                        selectMode={"week"}
-                        showMonths={2}
-                        skipMonths={2}
-                        locale="PT-PT"
-                        startDate={DayPilot.Date.today()}
-                        selectionDay={DayPilot.Date.today()}
-                        onTimeRangeSelected={ args => {
-                            this.calendar.update({
-                                startDate: args.day,
-                            });
-                            this.getDate()
-                            this.addEvent()
+                    {/*<DayPilotNavigator*/}
+                    {/*    selectMode={"week"}*/}
+                    {/*    showMonths={2}*/}
+                    {/*    skipMonths={2}*/}
+                    {/*    locale="PT-PT"*/}
+                    {/*    startDate={DayPilot.Date.today()}*/}
+                    {/*    selectionDay={DayPilot.Date.today()}*/}
+                    {/*    onTimeRangeSelected={ args => {*/}
+                    {/*        this.calendar.update({*/}
+                    {/*            startDate: args.day,*/}
+                    {/*        });*/}
+                    {/*        this.getDate()*/}
+                    {/*       // this.addEvent()*/}
 
-                        }}
-                    />
+                    {/*    }}*/}
+                    {/*/>*/}
                 </div>
                 <div style={styles.main}>
                     <DayPilotCalendar
@@ -156,6 +129,25 @@ function Horario() {
             return res
         }
     }
+    const getId = async () => {
+        console.log("aqui")
+        fetch('/appointments/list', {
+            method: 'GET',
+           // body:
+        }).then(async response => {
+            if (response.status !== 200) {
+                //console.log(response.status)
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+        }).catch((error) => {
+            console.error(error);
+        });
+
+    };
+
+
     useEffect(() => {
         fetchData()
             .then((res) => {
@@ -168,12 +160,12 @@ function Horario() {
 
     const handleChange = () => {
         console.log(ref1.current.calendarRef.current.control.events)
-        ref1.current.calendarRef.current.control.events.add({
-                id: 1,
-                text: "Event 1",
-                start: "2022-12-03T10:30:00",
-                end: "2022-12-03T13:00:00"
-            })
+        //ref1.current.calendarRef.current.control.events.add({
+          //      id: 1,
+            //    text: "Event 1",
+              //  start: "2022-12-03T10:30:00",
+               // end: "2022-12-03T13:00:00"
+            //})
        // ref1.current.control.add({
        //      id: 1,
        //      text: "Event 1",
@@ -202,17 +194,29 @@ function Horario() {
     ];
     const handleRowClick = (e,row) => {
         try {
-            console.log(row.getData().curso)
-            console.log("AUI")
-            const event = {
-                id: 4,
-                text: "Event 1",
-                start: "2022-12-02T10:30:00",
-                end: "2022-12-02T13:00:00"
-            };
-            new Calendar().addEvent()
+            let e = ref1.current.calendarRef.current.control.events.find("OLA");
+            //console.log(ref1.current.calendarRef.current.control.startDate.dayOfWeek())
 
-
+            if(e===null){
+                let data=row.getData()
+                let day=ref1.current.calendarRef.current.control.startDate.getDay()
+                let dayOfWeek=ref1.current.calendarRef.current.control.startDate.dayOfWeek()
+                //console.log(dayOfWeek)
+                let body = JSON.stringify({ 'row':  row.getData() , 'dateToday':day,
+                    'dayOfWeek':dayOfWeek})
+                console.log(body)
+                //console.log(row.getData().curso)
+                //console.log("AUI")
+                ref1.current.calendarRef.current.control.events.add({
+                    id: "OLA",
+                    text: row.getData().curso,
+                    start: "2022-12-06T10:30:00",
+                    end: "2022-12-06T13:00:00"
+                })
+            }
+            else {
+                ref1.current.calendarRef.current.control.events.remove(e).queue();
+            }
         }
         catch (e) {
 
@@ -237,23 +241,30 @@ function Horario() {
 
     return (
         <div>
-            <header className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
+            <header className="absolute font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
                 Novo Fenix
             </header>
 
-            <div className="mx-auto w-[1440px] pt-[8rem]">
+            <div className="mx-auto py-[8rem] px-2">
             <h1 onClick={handleChange}>carrega me</h1>
-            <ReactTabulator
-                data={professor}
-                columns={columns}
-                onRef={(r) => (workloadsTableRef = r)}
-                options={workloadsTableOptions}
-                events={{
-                    rowClick: handleRowClick,
-                }}
+                <div className="flex flex-row">
+                    <div className="w-1/2">
+                        <ReactTabulator
+                            data={professor}
+                            columns={columns}
+                            onRef={(r) => (workloadsTableRef = r)}
+                            options={workloadsTableOptions}
+                            events={{
+                                rowClick: handleRowClick,
+                            }}
+                        />
+                    </div>
+                   <div className="w-1/2">
+                       <Calendar  ref={ref1}></Calendar>
+                   </div>
 
-            />
-            <Calendar  ref={ref1}></Calendar>
+                </div>
+
             </div>
             <footer className="font-medium bg-blue-100  mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
                 Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática

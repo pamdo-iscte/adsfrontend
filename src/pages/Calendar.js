@@ -22,22 +22,22 @@ class Calendar extends Component {
         console.log(b)
     }
     addEvent=()=>{
-        console.log("AUI")
-        const event = {
-            id: 1,
-            text: "Event 1",
-            start: "2022-12-02T10:30:00",
-            end: "2022-12-02T13:00:00"
-        };
-        this.calendarRef.current.control.events.add(event)
-
-        this.calendar.events.add({
-            id: 1,
-            text: "Event 1",
-            start: "2022-12-03T10:30:00",
-            end: "2022-12-03T13:00:00"
-        })
-        this.calendar.update();
+        // console.log("AUI")
+        // const event = {
+        //     id: 1,
+        //     text: "Event 1",
+        //     start: "2022-12-02T10:30:00",
+        //     end: "2022-12-02T13:00:00"
+        // };
+        // this.calendarRef.current.control.events.add(event)
+        //
+        // this.calendar.events.add({
+        //     id: 1,
+        //     text: "Event 1",
+        //     start: "2022-12-03T10:30:00",
+        //     end: "2022-12-03T13:00:00"
+        // })
+        // this.calendar.update();
     }
     constructor(props) {
         super(props);
@@ -70,20 +70,7 @@ class Calendar extends Component {
                 end: "2023-03-08T11:30:00",
                 backColor: "#6aa84f"
             },
-            {
-                id: 3,
-                text: "Event 3",
-                start: "2022-11-22T08:30:00",
-                end: "2022-11-22T13:00:00",
-                backColor: "#f1c232"
-            },
-            {
-                id: 4,
-                text: "Event 4 Semanas 1,2,3,4,5",
-                start: "2022-11-22T11:30:00",
-                end: "2022-11-22T13:00:00",
-                backColor: "#cc4125"
-            },
+
         ];
 
         const startDate = DayPilot.Date.today();
@@ -107,8 +94,8 @@ class Calendar extends Component {
                             this.calendar.update({
                                 startDate: args.day,
                             });
-                            this.getDate()
-                            this.addEvent()
+                           // this.getDate()
+                           // this.addEvent()
 
                         }}
                     />
