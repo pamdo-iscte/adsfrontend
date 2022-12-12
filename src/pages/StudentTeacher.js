@@ -8,7 +8,7 @@ import leftArrow from "../assets/leftarrow.svg";
 function StudentTeacher() {
     const [hasAccount, setHasAccount] = useState(false);
     const [name, setName] = useState(false);
-    const [username,setUsername]=useState('')
+    const [username, setUsername] = useState('')
     const [createAccount, setCreateAccount] = useState(false);
     const navigate = useNavigate()
 
@@ -20,7 +20,11 @@ function StudentTeacher() {
 
     }
     const goTocalendar = () => {
-
+        if (hasAccount) {
+            navigate('/mycalendar')
+        } else {
+            navigate('/teste')
+        }
 
     }
 
@@ -36,7 +40,7 @@ function StudentTeacher() {
         setCreateAccount(true)
         setName(true)
     }
-console.log(username)
+    console.log(username)
     const returnHome = () => {
         navigate('/')
     }
@@ -79,18 +83,17 @@ console.log(username)
                         </div>
                     </form>
                     <div className="flex flex-row  flex justify-center items-center">
-                        <button onClick={goTocalendar} disabled={username!=='' ? false : true}
+                        <button onClick={goTocalendar} disabled={username !== '' ? false : true}
                                 className={"ml-[30px] py-[12px] px-[50px] rounded-[6.25rem] ml-[1.875rem] "
-                                    + (username!=='' ? 'bg-blue-600' : 'bg-gray-400')}>
+                                    + (username !== '' ? 'bg-blue-600' : 'bg-gray-400')}>
                             <p className={"font-Lato font-bold text-base leading-[1.2rem] "
-                                + (username!=='' ? 'text-white' : 'text-gray-600')}>
+                                + (username !== '' ? 'text-white' : 'text-gray-600')}>
                                 Avançar
                             </p>
                         </button>
                     </div>
 
                 </div> : ''}
-
 
 
             </div>

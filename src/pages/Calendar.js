@@ -7,9 +7,10 @@ const styles = {
     },
     left: {
         marginRight: "10px"
+
     },
     main: {
-        flexGrow: "1"
+        height:"100%"
     }
 };
 //https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
@@ -80,26 +81,7 @@ class Calendar extends Component {
     render() {
         return (
 
-            <div style={styles.wrap}>
-                <h1 onClick={this.getDate}>ola</h1>
-                <div style={styles.left}>
-                    <DayPilotNavigator
-                        selectMode={"week"}
-                        showMonths={2}
-                        skipMonths={2}
-                        locale="PT-PT"
-                        startDate={DayPilot.Date.today()}
-                        selectionDay={DayPilot.Date.today()}
-                        onTimeRangeSelected={ args => {
-                            this.calendar.update({
-                                startDate: args.day,
-                            });
-                           // this.getDate()
-                           // this.addEvent()
 
-                        }}
-                    />
-                </div>
                 <div style={styles.main}>
                     <DayPilotCalendar
                         {...this.state}
@@ -113,7 +95,6 @@ class Calendar extends Component {
 
                     />
                 </div>
-            </div>
         );
     }
 }

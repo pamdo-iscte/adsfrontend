@@ -15,7 +15,7 @@ function ServiçosAcadémicos() {
         {value: "Apple", label: "apple"},
         {value: "Orange", label: "orange"}
     ];
-    const [methods,setMethods]=useState(null)
+    const [methods, setMethods] = useState(null)
     const [selectedOption, setSelectedOption] = useState();
     const handleChange = (selectedOption) => {
         setSelectedOption(selectedOption);
@@ -42,9 +42,9 @@ function ServiçosAcadémicos() {
     useEffect(() => {
         fetchData()
             .then((res) => {
-                let array=[]
-               res.map((results) =>
-                    array.push({'value': results,'label': results})
+                let array = []
+                res.map((results) =>
+                    array.push({'value': results, 'label': results})
                 )
                 setMethods(array)
             })
@@ -53,7 +53,7 @@ function ServiçosAcadémicos() {
             })
     }, [])
 
-console.log(methods)
+    console.log(methods)
     const filterOptions = (candidate, input) => {
         if (input) {
             if (candidate.label.toLowerCase().includes(input.toLowerCase()))

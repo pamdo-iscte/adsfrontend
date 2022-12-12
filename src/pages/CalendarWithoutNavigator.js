@@ -24,6 +24,7 @@ class CalendarWithoutNavigator extends Component {
         // const event = {
         //     id: 1,
         //     text: "Event 1",
+        //     text: "Event 1",
         //     start: "2022-12-02T10:30:00",
         //     end: "2022-12-02T13:00:00"
         // };
@@ -55,20 +56,6 @@ class CalendarWithoutNavigator extends Component {
     componentDidMount() {
 
         const events = [
-            {
-                id: 1,
-                text: "Event 1",
-                start: "2023-03-07T10:30:00",
-                end: "2023-03-07T13:00:00"
-            },
-            {
-                id: 2,
-                text: "Event 2",
-                start: "2023-03-08T09:30:00",
-                end: "2023-03-08T11:30:00",
-                backColor: "#6aa84f"
-            },
-
         ];
 
         const startDate = DayPilot.Date.today();
@@ -79,24 +66,23 @@ class CalendarWithoutNavigator extends Component {
         return (
 
             <div style={styles.wrap}>
-                <h1 onClick={this.getDate}>ola</h1>
                 <div style={styles.left}>
-                    <DayPilotNavigator
-                        selectMode={"week"}
-                        showMonths={2}
-                        skipMonths={2}
-                        locale="PT-PT"
-                        startDate={DayPilot.Date.today()}
-                        selectionDay={DayPilot.Date.today()}
-                        onTimeRangeSelected={ args => {
-                            this.calendar.update({
-                                startDate: args.day,
-                            });
-                            // this.getDate()
-                            // this.addEvent()
+                    {/*<DayPilotNavigator*/}
+                    {/*    selectMode={"week"}*/}
+                    {/*    showMonths={2}*/}
+                    {/*    skipMonths={2}*/}
+                    {/*    locale="PT-PT"*/}
+                    {/*    startDate={DayPilot.Date.today()}*/}
+                    {/*    selectionDay={DayPilot.Date.today()}*/}
+                    {/*    onTimeRangeSelected={ args => {*/}
+                    {/*        this.calendar.update({*/}
+                    {/*            startDate: args.day,*/}
+                    {/*        });*/}
+                    {/*        this.getDate()*/}
+                    {/*       // this.addEvent()*/}
 
-                        }}
-                    />
+                    {/*    }}*/}
+                    {/*/>*/}
                 </div>
                 <div style={styles.main}>
                     <DayPilotCalendar

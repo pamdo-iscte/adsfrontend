@@ -16,12 +16,24 @@ const styles = {
 
 //https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
 
-class Calendar extends Component {
-    getDate = () => {
-        let a = this.calendarRef.current.control.startDate.dayOfWeek()
-        let b = this.calendarRef.current.control.startDate.getDay()
-        console.log(a)
-        console.log(b)
+class CalendarWithNavigator extends Component {
+    getDate = async () => {
+        // let a=this.calendarRef.current.control.startDate.dayOfWeek()
+        // let b=this.calendarRef.current.control.startDate.getDay()
+        // console.log(a)
+        // console.log(b)
+        console.log(this.calendarRef.current.control.events.list.length)
+        this.calendarRef.current.control.events.list = [];
+        this.calendarRef.current.control.update();
+        console.log(this.calendarRef.current.control.events.list.length)
+        //por aqui url depois
+        // const response = await fetch('')
+        // if (!response.ok) {
+        //     throw new Error('Data coud not be fetched!')
+        // } else {
+        //     let res = await response.json()
+        //     console.log(res)
+        // }
         // const event = {
         //     id: 1,
         //     text: "Event 1",
@@ -104,7 +116,6 @@ class Calendar extends Component {
         return (
 
             <div style={styles.wrap}>
-                <h1 onClick={this.addEvent}>ola</h1>
                 <div style={styles.left}>
                     <DayPilotNavigator
                         selectMode={"week"}
@@ -140,4 +151,4 @@ class Calendar extends Component {
     }
 }
 
-export default Calendar;
+export default CalendarWithNavigator;
