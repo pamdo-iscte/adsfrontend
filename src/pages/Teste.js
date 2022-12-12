@@ -210,8 +210,9 @@ function Horario() {
                 ref1.current.calendarRef.current.control.events.add({
                     id: "OLA",
                     text: row.getData().curso,
-                    start: "2022-12-06T10:30:00",
-                    end: "2022-12-06T13:00:00"
+                    start: "2022-12-12T10:30:00",
+                    end: "2022-12-12T13:00:00",
+                    backColor: "#6aa84f"
                 })
             }
             else {
