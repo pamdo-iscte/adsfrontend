@@ -16,6 +16,7 @@ import Modal from 'react-modal';
 
 import Calendar from './CalendarWithoutNavigator'
 import Spinner from "../components/Spinner";
+import Header from "../components/Header";
 
 const refCalendar = React.createRef();
 
@@ -220,10 +221,7 @@ function Horario() {
 
     return (
         <div>
-            <header
-                className="absolute font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
-                Novo Fenix
-            </header>
+           <Header></Header>
 
             <div className="mx-auto py-[8rem] px-2">
                 <PopUp></PopUp>

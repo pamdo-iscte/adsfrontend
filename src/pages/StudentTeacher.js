@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import Calendar from "./Calendar";
 import leftArrow from "../assets/leftarrow.svg";
+import Header from "../components/Header";
 
 function StudentTeacher() {
     const [hasAccount, setHasAccount] = useState(false);
@@ -56,11 +57,7 @@ function StudentTeacher() {
 
     return (
         <div>
-            <header
-                className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
-                Novo Fenix
-            </header>
-
+           <Header></Header>
             <div className="mx-auto w-[1024px] pt-[8rem] px-5">
                 <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
                     <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
@@ -83,7 +80,7 @@ function StudentTeacher() {
                         <div className="group  lg:w-[350px]">
                             <label
                                 className="text-center group-focus-within:text-blue-500 font-serif md:text-[15px] lg:text-[18px] font-normal leading-[22px] text-[dark] mt-3 pb-5">
-                                Nome de Utilizador
+                                Número
                             </label>
                             <input onChange={e => setUsername(e.target.value)} name="username"
                                    className="bg-white mt-[8px] rounded-[8px] w-full text-gray-700 py-3 px-4 mb-[30px] leading-tight border-[1px] focus:outline-none focus:shadow-lg focus:shadow-shadowColor focus:border-b-blue-500"

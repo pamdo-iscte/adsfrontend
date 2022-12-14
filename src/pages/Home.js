@@ -2,8 +2,7 @@ import '../../src/App.css';
 import {useState} from "react";
 
 import {useNavigate} from 'react-router-dom';
-import Calendar from "./Calendar";
-import Spinner from "../components/Spinner";
+import Header from "../components/Header";
 
 function Home() {
     const [aluno, setAluno] = useState(false);
@@ -36,10 +35,7 @@ function Home() {
 
     return (
         <div>
-            <header
-                className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
-                Novo Fenix
-            </header>
+           <Header></Header>
             <div className="mx-auto w-[1024px] pt-[8rem] px-5">
                 <h1 className="text-center font-bold text-[24px]">Iniciar Sessão</h1>
                 <h1 className="text-center mt-[20px] font-medium">Sou:</h1>

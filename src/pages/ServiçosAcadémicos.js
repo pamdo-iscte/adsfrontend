@@ -3,6 +3,7 @@ import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import {useNavigate} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
+import Header from "../components/Header";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
@@ -112,10 +113,7 @@ function ServiçosAcadémicos() {
 
     return (
         <div>
-            <header
-                className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
-                Novo Fenix
-            </header>
+           <Header></Header>
 
             <div className="mx-auto w-[1024px] pt-[8rem]">
                 <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
