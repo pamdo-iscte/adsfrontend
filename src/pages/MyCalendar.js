@@ -15,7 +15,7 @@ function ServiçosAcadémicos() {
     }
 
     const changeCalendar = () => {
-        navigate('/teste')
+        navigate('/makecalendar')
     }
 
     return (

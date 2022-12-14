@@ -29,7 +29,7 @@ function StudentTeacher() {
 
             })
         } else {
-            navigate('/teste', {
+            navigate('/makecalendar', {
                 state: {
                     num: username,
                 }
@@ -42,7 +42,7 @@ function StudentTeacher() {
         //fetch("/lei")
         //  .then((res) => res.json())
         // .then((data) => console.log(data));
-        navigate('/testes')
+        navigate('/makecalendar')
     }
 
     const newAccount = () => {

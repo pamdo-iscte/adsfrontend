@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreen from './pages/Home'
 import ServicosAcademicos from './pages/ServiçosAcadémicos'
 import Horario from './pages/Horario'
-import Teste from './pages/Teste'
+import MakeCalendar from './pages/MakeCalendar'
 import Raios from './pages/Raios'
 import StudentTeacher from "./pages/StudentTeacher";
 import MyCalendar from "./pages/MyCalendar";
@@ -17,7 +17,7 @@ export default function App() {
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/academicservices" element={<ServicosAcademicos/>}/>
                 <Route path="/schedule" element={<Horario/>}/>
-                <Route path="/teste" element={<Teste/>}/>
+                <Route path="/makecalendar" element={<MakeCalendar/>}/>
                 <Route path="/raios" element={<Raios/>}/>
                 <Route path="/login" element={<StudentTeacher/>}/>
                 <Route path="/mycalendar" element={<MyCalendar/>}/>
