@@ -11,15 +11,17 @@ import {ReactTabulator} from 'react-tabulator';
 import React, {Component} from 'react';
 import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
 import '../../src/App.css';
-
+import Modal from 'react-modal';
 //https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
 
 import Calendar from './CalendarWithoutNavigator'
+import Spinner from "../components/Spinner";
 
 const refCalendar = React.createRef();
 
+
 function Horario() {
-    const [professor, setProfessor] = useState();
+    const [professor, setProfessor] = useState(null);
     const [loading, setLoading] = useState(false)
 
     const fetchData = async () => {
@@ -30,6 +32,54 @@ function Horario() {
             let res = await response.json()
             return res
         }
+    }
+
+    const makeSureResetCalendar = async () => {
+        setIsOpen(true)
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
+
+    function resetCalendar() {
+        refCalendar.current.calendarRef.current.control.events.list=[]
+        refCalendar.current.calendarRef.current.control.update()
+        window.location.reload(false);
+        closeModal()
+    }
+
+
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+    const PopUp = () => {
+        return (
+            <div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    shouldCloseOnOverlayClick={false}
+                    ariaHideApp={false}
+                    onRequestClose={closeModal}
+                    style={{
+                        overlay: {
+                            background: 'rgba(0, 0, 0, 0.4)',
+                        },
+                    }}
+                    contentLabel="Example Modal"
+                    className={"w-[380px] h-[217px] bg-white rounded-[16px] md:mt-[45%] lg:mt-[15%] m-auto shadow-lg shadow-blue-300 drop-shadow-lg drop-shadow-blue-800"}
+                >
+                    <div className='ml-[36px] mr-[36px] pt-[30px]'>
+                        <div className='text-center text-dark font-bold text-[20px] leading-[22px]'>Tem a certeza que
+                            quer dar reset ao seu calendário?
+                        </div>
+                        <div className="mt-16 flex flex-row flex justify-center items-center">
+                            <button onClick={resetCalendar} className="hover:bg-blue-400 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">SIM</button>
+                            <button onClick={closeModal} className="hover:bg-blue-400 ml-6 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">NÃO</button>
+                        </div>
+                    </div>
+                </Modal>
+            </div>)
     }
 
 
@@ -91,52 +141,54 @@ function Horario() {
 
     const handleRowClick = (e, row) => {
         try {
-            let e = refCalendar.current.calendarRef.current.control.events.find("OLA");
-            //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
+                        //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
+            let data = row.getData()
+            let day = refCalendar.current.calendarRef.current.control.startDate.getDay()
+            let month = refCalendar.current.calendarRef.current.control.startDate.getMonth() + 1
+            let year = refCalendar.current.calendarRef.current.control.startDate.getYear()
+            let today = year + "/" + month + "/" + day
+            console.log(today)
 
-            if (e === null) {
-                let data = row.getData()
-                let day = refCalendar.current.calendarRef.current.control.startDate.getDay()
-                let month = refCalendar.current.calendarRef.current.control.startDate.getMonth() + 1
-                let year = refCalendar.current.calendarRef.current.control.startDate.getYear()
-                let today = year + "/" + month + "/" + day
-                console.log(today)
+            let dayOfWeek = refCalendar.current.calendarRef.current.control.startDate.dayOfWeek()
+            //console.log(dayOfWeek)
+            let body = JSON.stringify({
+                'horas': row.getData().horas,
+                'dias': row.getData().dias,
+                'datas': row.getData().datas,
+                'horas_repetidas': row.getData().horas_repetidas,
+                'turno': row.getData().turno,
+                'unidade_de_execucao': row.getData().unidade_de_execucao,
+                'data_de_hoje': today,
+                'dia_da_sem_de_hoje': dayOfWeek
+            })
+            // console.log(body)
+            fetch('/obter_aulas_da_UC_escolhida', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json; charset=UTF-8',},
+                body: body
+            }).then(async response => {
+                if (response.status !== 200) {
+                    //console.log(response.status)
+                    throw new Error(response.statusText);
+                }
+                const jsonRes = await response.json()
+                let e = refCalendar.current.calendarRef.current.control.events.find(jsonRes[0].id);
+                if (e === null) {
+                    jsonRes.map((results) =>
+                        refCalendar.current.calendarRef.current.control.events.add(results)
 
-                let dayOfWeek = refCalendar.current.calendarRef.current.control.startDate.dayOfWeek()
-                //console.log(dayOfWeek)
-                let body = JSON.stringify({
-                    'horas': row.getData().horas,
-                    'dias': row.getData().dias,
-                    'datas': row.getData().datas,
-                    'horas_repetidas': row.getData().horas_repetidas,
-                    'turno': row.getData().turno,
-                    'unidade_de_execucao': row.getData().unidade_de_execucao,
-                    'data_de_hoje': today,
-                    'dia_da_sem_de_hoje': dayOfWeek
-                })
-                // console.log(body)
-                fetch('/obter_aulas_da_UC_escolhida', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json; charset=UTF-8',},
-                    body: body
-                }).then(async response => {
-                    if (response.status !== 200) {
-                        //console.log(response.status)
-                        throw new Error(response.statusText);
-                    }
-                    const jsonRes = await response.json()
-                    console.log(jsonRes[0])
-                    refCalendar.current.calendarRef.current.control.events.add(jsonRes[0])
-                }).catch((error) => {
-                    console.error(error);
-                });
-            } else {
-                refCalendar.current.calendarRef.current.control.events.remove(e).queue();
-            }
+                    )
+                } else {
+                    refCalendar.current.calendarRef.current.control.events.remove(e);
+                }
+
+            }).catch((error) => {
+                console.error(error);
+            });
+
         } catch (e) {
 
         }
-        //console.log(workloadsTableRef.current.getSelectedData())
     };
 
 
@@ -166,14 +218,18 @@ function Horario() {
             </header>
 
             <div className="mx-auto py-[8rem] px-2">
+                <PopUp></PopUp>
                 <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
                     <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
-                    <p className="ml-[8px] ">Voltar para o Ecrâ Principal</p>
+                    <p className="ml-[8px] ">Voltar para o Ecrã Principal</p>
                 </button>
-                <h1 onClick={handleChange}>carrega me</h1>
+                <button onClick={makeSureResetCalendar}
+                        className="absolute top-[100px] hover:bg-red-700 right-0 bg-amber-500 w-[150px] rounded-full">Reset
+                    Horário
+                </button>
                 <div className="flex flex-row">
-                    <div className="w-2/3">
-                        <ReactTabulator
+                    <div className="w-3/5">
+                        {professor === null ? <Spinner></Spinner> : <ReactTabulator
                             data={professor}
                             columns={columns}
                             onRef={(r) => (workloadsTableRef = r)}
@@ -181,9 +237,10 @@ function Horario() {
                             events={{
                                 rowClick: handleRowClick,
                             }}
-                        />
+                        />}
+
                     </div>
-                    <div className="w-1/3">
+                    <div className="w-2/5">
                         <Calendar ref={refCalendar}></Calendar>
                     </div>
 

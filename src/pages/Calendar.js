@@ -1,53 +1,34 @@
 import React, {Component} from 'react';
 import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
-import '../../src/App.css';
+
+
 const styles = {
     wrap: {
         display: "flex"
     },
     left: {
         marginRight: "10px"
-
     },
     main: {
-        height:"100%"
+        flexGrow: "1"
     }
 };
-//https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
 
 class Calendar extends Component {
-    getDate = () => {
-        let a=this.calendarRef.current.control.startDate.dayOfWeek()
-        let b=this.calendarRef.current.control.startDate.getDay()
-        console.log(a)
-        console.log(b)
-    }
-    addEvent=()=>{
-        // console.log("AUI")
-        // const event = {
-        //     id: 1,
-        //     text: "Event 1",
-        //     start: "2022-12-02T10:30:00",
-        //     end: "2022-12-02T13:00:00"
-        // };
-        // this.calendarRef.current.control.events.add(event)
-        //
-        // this.calendar.events.add({
-        //     id: 1,
-        //     text: "Event 1",
-        //     start: "2022-12-03T10:30:00",
-        //     end: "2022-12-03T13:00:00"
-        // })
-        // this.calendar.update();
-    }
+
     constructor(props) {
         super(props);
         this.calendarRef = React.createRef();
         this.state = {
             viewType: "Week",
-            durationBarVisible: true,
-            theme:"calendar_weekly",
-            locale:"PT-PT"
+            durationBarVisible: false,
+            onEventClick: async args => {
+                const dp = this.calendar;
+                const modal = await DayPilot.Modal.alert(args.e.text());
+                if (!modal.result) { return; }
+            },
+
+
         };
     }
 
@@ -71,30 +52,52 @@ class Calendar extends Component {
                 end: "2023-03-08T11:30:00",
                 backColor: "#6aa84f"
             },
-
+            {
+                id: 3,
+                text: "Event 3",
+                start: "2023-03-08T12:00:00",
+                end: "2023-03-08T15:00:00",
+                backColor: "#f1c232"
+            },
+            {
+                id: 4,
+                text: "Event 4",
+                start: "2023-03-06T11:30:00",
+                end: "2023-03-06T14:30:00",
+                backColor: "#cc4125"
+            },
         ];
 
-        const startDate = DayPilot.Date.today();
+        const startDate = "2023-03-07";
+
         this.calendar.update({startDate, events});
+
     }
 
     render() {
         return (
-
-
+            <div style={styles.wrap}>
+                <div style={styles.left}>
+                    <DayPilotNavigator
+                        selectMode={"week"}
+                        showMonths={3}
+                        skipMonths={3}
+                        startDate={"2023-03-07"}
+                        selectionDay={"2023-03-07"}
+                        onTimeRangeSelected={ args => {
+                            this.calendar.update({
+                                startDate: args.day
+                            });
+                        }}
+                    />
+                </div>
                 <div style={styles.main}>
                     <DayPilotCalendar
                         {...this.state}
-                        headerDateFormat={"dddd"}
-                        timeFormat={"Clock24Hours"}
-                        eventMoveHandling ={"Disabled"}
-                        eventResizeHandling ={"Disabled"}
-                        timeRangeSelectedHandling ={"Disabled"}
                         ref={this.calendarRef}
-
-
                     />
                 </div>
+            </div>
         );
     }
 }
