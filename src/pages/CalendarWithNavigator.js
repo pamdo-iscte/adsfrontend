@@ -65,10 +65,19 @@ class CalendarWithNavigator extends Component {
         super(props);
         this.calendarRef = React.createRef();
         this.state = {
+            businessBeginsHour: 8,
+            businessEndsHour: 23,
+            heightSpec: "BusinessHoursNoScroll",
             viewType: "Week",
             durationBarVisible: true,
-            theme: "calendar_weekly",
-            locale: "PT-PT"
+            theme:"calendar_weekly",
+            locale:"PT-PT",
+            cellHeight:40,
+            onEventClick: async args => {
+                const dp = this.calendar;
+                const modal = await DayPilot.Modal.alert(args.e.text());
+                if (!modal.result) { return; }
+            },
         };
     }
 

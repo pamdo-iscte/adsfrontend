@@ -21,7 +21,7 @@ const refCalendar = React.createRef();
 
 
 function Horario() {
-    const [professor, setProfessor] = useState(null);
+    const [classes, setClasses] = useState(null);
     const [loading, setLoading] = useState(false)
 
     const fetchData = async () => {
@@ -36,10 +36,15 @@ function Horario() {
 
     const makeSureResetCalendar = async () => {
         setIsOpen(true)
+        //console.log(workloadsTableRef.current.getSelectedData())
     }
 
     function closeModal() {
         setIsOpen(false);
+    }
+
+    function saveHorario() {
+       navigate("/mycalendar")
     }
 
     function resetCalendar() {
@@ -106,7 +111,7 @@ function Horario() {
     useEffect(() => {
         fetchData()
             .then((res) => {
-                setProfessor(res)
+                setClasses(res)
             })
             .catch((e) => {
                 console.log(e.message)
@@ -172,14 +177,17 @@ function Horario() {
                     throw new Error(response.statusText);
                 }
                 const jsonRes = await response.json()
+                console.log(jsonRes[0])
                 let e = refCalendar.current.calendarRef.current.control.events.find(jsonRes[0].id);
                 if (e === null) {
                     jsonRes.map((results) =>
                         refCalendar.current.calendarRef.current.control.events.add(results)
-
                     )
                 } else {
-                    refCalendar.current.calendarRef.current.control.events.remove(e);
+                    jsonRes.map((results) =>
+                        refCalendar.current.calendarRef.current.control.events.remove(results.id)
+                    )
+
                 }
 
             }).catch((error) => {
@@ -224,13 +232,16 @@ function Horario() {
                     <p className="ml-[8px] ">Voltar para o Ecrã Principal</p>
                 </button>
                 <button onClick={makeSureResetCalendar}
-                        className="absolute top-[100px] hover:bg-red-700 right-0 bg-amber-500 w-[150px] rounded-full">Reset
+                        className="absolute top-[100px] hover:bg-red-700 right-[8px] bg-amber-500 w-[150px] rounded-full">Reset
                     Horário
+                </button>
+                <button onClick={saveHorario}
+                        className="absolute top-[100px] hover:bg-red-700 right-[170px] bg-amber-500 w-[150px] rounded-full">Guardar
                 </button>
                 <div className="flex flex-row">
                     <div className="w-3/5">
-                        {professor === null ? <Spinner></Spinner> : <ReactTabulator
-                            data={professor}
+                        {classes === null ? <Spinner></Spinner> : <ReactTabulator
+                            data={classes}
                             columns={columns}
                             onRef={(r) => (workloadsTableRef = r)}
                             options={workloadsTableOptions}

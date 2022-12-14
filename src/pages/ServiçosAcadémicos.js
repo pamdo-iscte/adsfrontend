@@ -20,8 +20,7 @@ function ServiçosAcadémicos() {
     const handleChange = (selectedOption) => {
         setSelectedOption(selectedOption);
     };
-    console.log(selectedOption)
-
+    const [pBar, setpBar] = useState(30)
     const fetchData = async () => {
         const response = await fetch('get_metodos', {
             method: 'GET',
@@ -38,6 +37,39 @@ function ServiçosAcadémicos() {
             return res
         }
     }
+    const ProgressBar = (props) => {
+        const {bgcolor, completed} = props;
+
+        const containerStyles = {
+            height: 20,
+            width: '100%',
+            backgroundColor: "#e0e0de",
+            borderRadius: 50,
+            margin: 50
+        }
+
+        const fillerStyles = {
+            height: '100%',
+            width: `${completed}%`,
+            backgroundColor: bgcolor,
+            borderRadius: 'inherit',
+            textAlign: 'right'
+        }
+
+        const labelStyles = {
+            padding: 5,
+            color: 'white',
+            fontWeight: 'bold'
+        }
+
+        return (
+            <div style={containerStyles}>
+                <div style={fillerStyles}>
+                    <span style={labelStyles}>{`${completed}%`}</span>
+                </div>
+            </div>
+        );
+    };
 
     useEffect(() => {
         fetchData()
@@ -53,7 +85,6 @@ function ServiçosAcadémicos() {
             })
     }, [])
 
-    console.log(methods)
     const filterOptions = (candidate, input) => {
         if (input) {
             if (candidate.label.toLowerCase().includes(input.toLowerCase()))
@@ -73,6 +104,11 @@ function ServiçosAcadémicos() {
     const returnHome = () => {
         navigate('/')
     }
+    const teste = () => {
+        let v = pBar
+        setpBar(v + 10)
+    }
+
 
     return (
         <div>
@@ -99,10 +135,11 @@ function ServiçosAcadémicos() {
                     isSearchable
                     filterOption={filterOptions}
                 />
-                <button className="mt-[20px] flex flex-row  flex justify-center items-center
+                <button onClick={teste} className="mt-[20px] flex flex-row  flex justify-center items-center
             bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
             ">Criar um horário com estes métodos
                 </button>
+                <ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>
 
             </div>
             <footer

@@ -49,6 +49,7 @@ class CalendarWithoutNavigator extends Component {
             durationBarVisible: true,
             theme:"calendar_weekly",
             locale:"PT-PT",
+            cellHeight:40,
             onEventClick: async args => {
                 const dp = this.calendar;
                 const modal = await DayPilot.Modal.alert(args.e.text());
