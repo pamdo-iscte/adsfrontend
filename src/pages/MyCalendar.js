@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate,useLocation} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import CalendarWithNavigator from "./CalendarWithNavigator";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
+    const location=useLocation()
     const animatedComponents = makeAnimated();
 
     const refCalendar = React.createRef();
@@ -17,6 +18,32 @@ function ServiçosAcadémicos() {
     const changeCalendar = () => {
         navigate('/makecalendar')
     }
+    const fetchData = async (body) => {
+        fetch('/null', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            return jsonRes
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    useEffect(() => {
+        console.log(location.state.num)
+        const body = JSON.stringify({"numero": location.state.num});
+        fetchData(body)
+            .then((res) => {
+
+            })
+            .catch((e) => {
+                console.log(e.message)
+            })
+    }, [])
 
     return (
         <div>

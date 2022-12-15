@@ -52,7 +52,9 @@ class CalendarWithoutNavigator extends Component {
             cellHeight:40,
             onEventClick: async args => {
                 const dp = this.calendar;
-                const modal = await DayPilot.Modal.alert(args.e.text());
+                let zed=args.e.id()
+                let e = dp.events.find(zed);
+                const modal = await DayPilot.Modal.alert(e.data.informacao_detalhada);
                 if (!modal.result) { return; }
             },
         };

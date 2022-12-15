@@ -22,10 +22,10 @@ class CalendarWithNavigator extends Component {
         // let b=this.calendarRef.current.control.startDate.getDay()
         // console.log(a)
         // console.log(b)
-        console.log(this.calendarRef.current.control.events.list.length)
-        this.calendarRef.current.control.events.list = [];
-        this.calendarRef.current.control.update();
-        console.log(this.calendarRef.current.control.events.list.length)
+        // console.log(this.calendarRef.current.control.events.list.length)
+        // this.calendarRef.current.control.events.list = [];
+        // this.calendarRef.current.control.update();
+        // console.log(this.calendarRef.current.control.events.list.length)
         //por aqui url depois
         // const response = await fetch('')
         // if (!response.ok) {
@@ -75,7 +75,9 @@ class CalendarWithNavigator extends Component {
             cellHeight:40,
             onEventClick: async args => {
                 const dp = this.calendar;
-                const modal = await DayPilot.Modal.alert(args.e.text());
+                let zed=args.e.id()
+                let e = dp.events.find(zed);
+                const modal = await DayPilot.Modal.alert(e.data.informacao_detalhada);
                 if (!modal.result) { return; }
             },
         };
@@ -106,14 +108,16 @@ class CalendarWithNavigator extends Component {
                 text: "Event 3",
                 start: "2022-12-12T08:30:00",
                 end: "2022-12-12T13:00:00",
-                backColor: "#f1c232"
+                backColor: "#f1c232",
+                sigla:"teu cu"
             },
             {
                 id: 4,
-                text: "Event 4 Semanas 1,2,3,4,5",
-                start: "2022-11-22T11:30:00",
-                end: "2022-11-22T13:00:00",
-                backColor: "#cc4125"
+                text: "Event 3",
+                start: "2022-12-13T08:30:00",
+                end: "2022-12-13T13:30:00",
+                backColor: "#f1c232",
+                sigla:"nao"
             },
         ];
 
@@ -137,8 +141,6 @@ class CalendarWithNavigator extends Component {
                             this.calendar.update({
                                 startDate: args.day,
                             });
-                            this.getDate()
-
                         }}
                     />
                 </div>

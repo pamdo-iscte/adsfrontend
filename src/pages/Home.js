@@ -52,7 +52,7 @@ function Home() {
 
             </div>
             <footer
-                className="absolute font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
+                className="tflex flex-row  flex justify-center items-center absolute font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
                 Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
                 por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho
             </footer>
