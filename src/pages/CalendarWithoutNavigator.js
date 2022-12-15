@@ -13,31 +13,6 @@ const styles = {
     }
 };
 class CalendarWithoutNavigator extends Component {
-    getDate = () => {
-        let a=this.calendarRef.current.control.startDate.dayOfWeek()
-        let b=this.calendarRef.current.control.startDate.getDay()
-        console.log(a)
-        console.log(b)
-    }
-    addEvent=()=>{
-        // console.log("AUI")
-        // const event = {
-        //     id: 1,
-        //     text: "Event 1",
-        //     text: "Event 1",
-        //     start: "2022-12-02T10:30:00",
-        //     end: "2022-12-02T13:00:00"
-        // };
-        // this.calendarRef.current.control.events.add(event)
-        //
-        // this.calendar.events.add({
-        //     id: 1,
-        //     text: "Event 1",
-        //     start: "2022-12-03T10:30:00",
-        //     end: "2022-12-03T13:00:00"
-        // })
-        // this.calendar.update();
-    }
     constructor(props) {
         super(props);
         this.calendarRef = React.createRef();

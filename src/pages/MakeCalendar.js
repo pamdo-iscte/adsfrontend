@@ -158,6 +158,7 @@ function Horario() {
             let dayOfWeek = refCalendar.current.calendarRef.current.control.startDate.dayOfWeek()
             //console.log(dayOfWeek)
             let body = JSON.stringify({
+                'curso':row.getData().curso,
                 'horas': row.getData().horas,
                 'dias': row.getData().dias,
                 'datas': row.getData().datas,

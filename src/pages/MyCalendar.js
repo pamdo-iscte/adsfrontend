@@ -38,7 +38,9 @@ function ServiçosAcadémicos() {
         const body = JSON.stringify({"numero": location.state.num});
         fetchData(body)
             .then((res) => {
-
+                res.map((results) =>
+                    refCalendar.current.calendarRef.current.control.events.add(results)
+                )
             })
             .catch((e) => {
                 console.log(e.message)
