@@ -68,8 +68,8 @@ function ServiçosAcadémicos() {
                         </button>
                     </div>
                     <div>
-                        <button className="lex flex-row  flex justify-center items-center" onClick={changeCalendar}>
-                            <p className="ml-[8px] ">Reformular o Calendário</p>
+                        <button className="ml-[20px] lex flex-row  flex justify-center items-center hover:bg-red-700 right-[8px] bg-amber-500 w-[200px] rounded-full" onClick={changeCalendar}>
+                            <p className="">Reformular o Calendário</p>
                         </button>
                     </div>
 

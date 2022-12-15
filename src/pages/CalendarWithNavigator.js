@@ -61,6 +61,25 @@ class CalendarWithNavigator extends Component {
         this.calendar.update();
     }
 
+    changeEverything = () => {
+        console.log("COCO")
+        let a = this.calendarRef.current.control.startDate.dayOfWeek()
+        let b = this.calendarRef.current.control.startDate.getDay()
+        console.log(a)
+        console.log(b)
+        fetch("/cenas").then(async response => {
+            if (response.status !== 200) {
+                //console.log(response.status)
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
     constructor(props) {
         super(props);
         this.calendarRef = React.createRef();
@@ -70,15 +89,17 @@ class CalendarWithNavigator extends Component {
             heightSpec: "BusinessHoursNoScroll",
             viewType: "Week",
             durationBarVisible: true,
-            theme:"calendar_weekly",
-            locale:"PT-PT",
-            cellHeight:40,
+            theme: "calendar_weekly",
+            locale: "PT-PT",
+            cellHeight: 40,
             onEventClick: async args => {
                 const dp = this.calendar;
-                let zed=args.e.id()
+                let zed = args.e.id()
                 let e = dp.events.find(zed);
                 const modal = await DayPilot.Modal.alert(e.data.informacao_detalhada);
-                if (!modal.result) { return; }
+                if (!modal.result) {
+                    return;
+                }
             },
         };
     }
@@ -109,7 +130,7 @@ class CalendarWithNavigator extends Component {
                 start: "2022-12-12T08:30:00",
                 end: "2022-12-12T13:00:00",
                 backColor: "#f1c232",
-                sigla:"teu cu"
+                sigla: "teu cu"
             },
             {
                 id: 4,
@@ -117,7 +138,7 @@ class CalendarWithNavigator extends Component {
                 start: "2022-12-13T08:30:00",
                 end: "2022-12-13T13:30:00",
                 backColor: "#f1c232",
-                sigla:"nao"
+                sigla: "nao"
             },
         ];
 
@@ -141,6 +162,8 @@ class CalendarWithNavigator extends Component {
                             this.calendar.update({
                                 startDate: args.day,
                             });
+                            this.changeEverything()
+
                         }}
                     />
                 </div>

@@ -131,7 +131,6 @@ function Horario() {
         try {
                         //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
             let data = row.getData()
-            let dayOfWeek = refCalendar.current.calendarRef.current.control.startDate.dayOfWeek()
             //console.log(dayOfWeek)
             let body = JSON.stringify({
                 'curso':row.getData().curso,
