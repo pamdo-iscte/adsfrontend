@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate,useLocation} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import 'react-tabulator/lib/styles.css'; // required styles
 //import 'react-tabulator/lib/css/tabulator.min.css'; // theme
@@ -23,8 +23,7 @@ const refCalendar = React.createRef();
 
 function Horario() {
     const [classes, setClasses] = useState(null);
-    const [loading, setLoading] = useState(false)
-
+    const location=useLocation()
     const fetchData = async () => {
         const response = await fetch('get_aluno_professor')
         if (!response.ok) {
@@ -45,7 +44,26 @@ function Horario() {
     }
 
     function saveHorario() {
-       navigate("/mycalendar")
+        const selectedClasses=workloadsTableRef.current.getSelectedData()
+        const body=JSON.stringify({"selectedData":selectedClasses})
+        fetch('/sendselecteddata', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                //console.log(response.status)
+                throw new Error(response.statusText);
+            }
+            navigate("/mycalendar", {
+                state: {
+                    num: location.state.num,
+                }
+            })
+
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     function resetCalendar() {
@@ -89,26 +107,6 @@ function Horario() {
     }
 
 
-    const fetchDataAboutClass = async (body) => {
-        fetch('/obter_aulas_da_UC_escolhida', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json; charset=UTF-8',},
-            body: body
-        }).then(async response => {
-            if (response.status !== 200) {
-                //console.log(response.status)
-                throw new Error(response.statusText);
-            }
-            const jsonRes = await response.json()
-            console.log(jsonRes[0])
-            return jsonRes[0]
-        }).catch((error) => {
-            console.error(error);
-        });
-
-    };
-
-
     useEffect(() => {
         fetchData()
             .then((res) => {
@@ -119,22 +117,6 @@ function Horario() {
             })
     }, [])
 
-    const handleChange = () => {
-        console.log(refCalendar.current.calendarRef.current.control.events)
-        //refCalendar.current.calendarRef.current.control.events.add({
-        //      id: 1,
-        //    text: "Event 1",
-        //  start: "2022-12-03T10:30:00",
-        // end: "2022-12-03T13:00:00"
-        //})
-        // refCalendar.current.control.add({
-        //      id: 1,
-        //      text: "Event 1",
-        //      start: "2022-12-03T10:30:00",
-        //      end: "2022-12-03T13:00:00"
-        //  })
-        // console.log(workloadsTableRef.current.getSelectedData())
-    };
 
     const columns = [
         {title: "Curso", field: "curso", width: 150, headerFilter: "input"},
@@ -149,12 +131,6 @@ function Horario() {
         try {
                         //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
             let data = row.getData()
-            let day = refCalendar.current.calendarRef.current.control.startDate.getDay()
-            let month = refCalendar.current.calendarRef.current.control.startDate.getMonth() + 1
-            let year = refCalendar.current.calendarRef.current.control.startDate.getYear()
-            let today = year + "/" + month + "/" + day
-            console.log(today)
-
             let dayOfWeek = refCalendar.current.calendarRef.current.control.startDate.dayOfWeek()
             //console.log(dayOfWeek)
             let body = JSON.stringify({
@@ -165,8 +141,6 @@ function Horario() {
                 'horas_repetidas': row.getData().horas_repetidas,
                 'turno': row.getData().turno,
                 'unidade_de_execucao': row.getData().unidade_de_execucao,
-                'data_de_hoje': today,
-                'dia_da_sem_de_hoje': dayOfWeek
             })
             // console.log(body)
             fetch('/obter_aulas_da_UC_escolhida', {

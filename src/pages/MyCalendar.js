@@ -16,7 +16,12 @@ function ServiçosAcadémicos() {
     }
 
     const changeCalendar = () => {
-        navigate('/makecalendar')
+        navigate('/makecalendar', {
+            state: {
+                num: location.state.num,
+            }
+
+        })
     }
     const fetchData = async (body) => {
         fetch('/null', {
