@@ -43,7 +43,7 @@ function ServiçosAcadémicos() {
 
         })
         if (!response.ok) {
-            throw new Error('Data coud not be fetched!')
+            throw new Error('Data could not be fetched!')
         } else {
             let res = await response.json()
             return res
@@ -122,16 +122,15 @@ function ServiçosAcadémicos() {
         navigate('/')
     }
     const createHorario = () => {
-        let aulas=[]
-        methods.map((results) =>
-            aulas.push(results.label)
+        let array = []
+        let array1 = []
+        selectedOptionAulas.map((results) =>
+            array.push(results.label)
         )
-        let avaliacoes=[]
-        methodsAulas.map((results) =>
-            aulas.push(results.label)
+        selectedOptionAvaliacoes.map((results1) =>
+            array1.push(results1.label)
         )
-        console.log(aulas)
-        const body=JSON.stringify({"aulas":aulas,"avaliacoes":avaliacoes})
+        const body=JSON.stringify({"aulas":array,"avaliacoes":array1})
         console.log(body)
         fetch('/obter_metodos_selecionados', {
             method: 'POST',
@@ -190,7 +189,7 @@ function ServiçosAcadémicos() {
             ">Criar um horário com estes métodos
                 </button>
                 <ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>
-                <CSVLink data={csvData}>Download me</CSVLink>;
+                <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
             </div>
             <footer
                 className="font-medium bg-blue-100 absolute mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
