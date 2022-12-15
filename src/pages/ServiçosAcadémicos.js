@@ -133,7 +133,7 @@ function ServiçosAcadémicos() {
         console.log(aulas)
         const body=JSON.stringify({"aulas":aulas,"avaliacoes":avaliacoes})
         console.log(body)
-        fetch('/null', {
+        fetch('/obter_metodos_selecionados', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
             body: body
