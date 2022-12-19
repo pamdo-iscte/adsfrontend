@@ -8,7 +8,7 @@ import MakeCalendar from './pages/MakeCalendar'
 import Raios from './pages/Raios'
 import StudentTeacher from "./pages/StudentTeacher";
 import MyCalendar from "./pages/MyCalendar";
-
+import About from "./pages/About";
 export default function App() {
     return (
         <Router>
@@ -21,6 +21,7 @@ export default function App() {
                 <Route path="/raios" element={<Raios/>}/>
                 <Route path="/login" element={<StudentTeacher/>}/>
                 <Route path="/mycalendar" element={<MyCalendar/>}/>
+                <Route path="/about" element={<About/>}/>
                 <Route path="/*" element={<div>NOT FOUND</div>}/>
 
             </Routes>

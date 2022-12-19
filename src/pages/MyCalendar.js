@@ -4,6 +4,7 @@ import makeAnimated from 'react-select/animated';
 import {useNavigate,useLocation} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import CalendarWithNavigator from "./CalendarWithNavigator";
+import SideBar from "../components/SideBar";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
@@ -59,16 +60,12 @@ function ServiçosAcadémicos() {
                 Novo Fenix
             </header>
 
-            <div className="mx-auto py-[8rem] px-2">
-                <div className="flex flex-row ...">
+            <div className="mx-auto pt-[6rem] px-2">
+                <SideBar></SideBar>
+                <div className="pt-[4rem] flex flex-row ...">
+
                     <div>
-                        <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
-                            <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
-                            <p className="ml-[8px] ">Voltar para o Ecrâ Principal</p>
-                        </button>
-                    </div>
-                    <div>
-                        <button className="ml-[20px] lex flex-row  flex justify-center items-center hover:bg-red-700 right-[8px] bg-amber-500 w-[200px] rounded-full" onClick={changeCalendar}>
+                        <button className="ml-[230px] flex flex-row  flex justify-center items-center hover:bg-red-700 right-[8px] bg-amber-500 w-[200px] rounded-full" onClick={changeCalendar}>
                             <p className="">Reformular o Calendário</p>
                         </button>
                     </div>

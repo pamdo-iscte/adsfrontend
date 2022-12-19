@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import Calendar from "./Calendar";
 import leftArrow from "../assets/leftarrow.svg";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 
 function StudentTeacher() {
     const [hasAccount, setHasAccount] = useState(false);
@@ -58,12 +59,9 @@ function StudentTeacher() {
     return (
         <div>
            <Header></Header>
-            <div className="mx-auto w-[1024px] pt-[8rem] px-5">
-                <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
-                    <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
-                    <p className="ml-[8px] ">Voltar para o Ecrã Principal</p>
-                </button>
-                <h1 className="text-center font-bold text-[24px]">Iniciar Sessão</h1>
+            <div className="pt-[6rem]">
+                <SideBar></SideBar>
+                <h1 className="pt-[4rem] text-center font-bold text-[24px]">Iniciar Sessão</h1>
                 <h1 className="text-center mt-[20px] font-medium">Sou:</h1>
                 <div className="mt-[30px] flex flex-row  flex justify-center items-center ">
                     <button onClick={fhasAccount} className=

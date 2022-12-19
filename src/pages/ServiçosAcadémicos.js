@@ -4,9 +4,24 @@ import makeAnimated from 'react-select/animated';
 import {useNavigate} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import Header from "../components/Header";
-import { CSVLink, CSVDownload } from "react-csv";
+import {CSVLink, CSVDownload} from "react-csv";
+import ICalendarLink from "react-icalendar-link";
+import SideBar from "../components/SideBar";
+import axios from 'axios';
+
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
+    const event = {
+        title: "My Title",
+        description: "My Description",
+        startTime: "2018-10-07T10:30:00+10:00",
+        endTime: "2018-10-07T12:00:00+10:00",
+        location: "10 Carlotta St, Artarmon NSW 2064, Australia",
+        attendees: [
+            "Hello World <hello@world.com>",
+            "Hey <hey@test.com>",
+        ]
+    }
     const animatedComponents = makeAnimated();
     const csvData = [
         ["firstname", "lastname", "email"],
@@ -130,7 +145,7 @@ function ServiçosAcadémicos() {
         selectedOptionAvaliacoes.map((results1) =>
             array1.push(results1.label)
         )
-        const body=JSON.stringify({"aulas":array,"avaliacoes":array1})
+        const body = JSON.stringify({"aulas": array, "avaliacoes": array1})
         console.log(body)
         fetch('/obter_metodos_selecionados', {
             method: 'POST',
@@ -148,48 +163,129 @@ function ServiçosAcadémicos() {
         let v = pBar
         setpBar(v + 10)
     }
+    const fileData = () => {
+
+        if (selected) {
+
+            return (
+                <div>
+                    <h2>File Details:</h2>
+                    <p>File Name: {selected.name}</p>
+
+                    <p>File Type: {selected.type}</p>
+
+                    <p>
+                        Last Modified:{" "}
+                        {selected.toDateString()}
+                    </p>
+
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <br/>
+                    <h4>Choose before Pressing the Upload button</h4>
+                </div>
+            );
+        }
+    };
+    const [selected, setSelected] = useState(null)
+    const onFileChange = event => {
+
+        // Update the state
+        setSelected(event.target.files[0]);
+        console.log(selected)
+
+    };
+    const ze = async (body) => {
+        fetch('/upload', {
+            method: 'POST',
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+            if(jsonRes.ok){
+                console.log("FIXE")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    // On file upload (click the upload button)
+    const onFileUpload = () => {
+        const data = new FormData()
+        data.append('file', selected)
+        console.log(data)
+        ze(data)
+
+        //const formData = new FormData();
+
+        // Update the formData object
+
+
+        // Details of the uploaded file
+        // console.log(file.selectedFile);
+
+        // Request made to the backend api
+        // Send formData object
+    };
 
 
     return (
         <div>
             <Header></Header>
-
-            <div className="mx-auto w-[1024px] pt-[8rem]">
-                <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
-                    <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
-                    <p className="ml-[8px] ">Voltar para o Ecrã Principal</p>
-                </button>
-
-                <h1 className="text-center font-bold text-[20px] mb-[50px]">Escolha os Metodos que pretende que seja
-                    aplicado:</h1>
-                <h1 className="mb-3">Métodos para as aulas:</h1>
-                <Select
-                    value={selectedOptionAulas}
-                    onChange={handleChangeAulas}
-                    options={methodsAulas}
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    isSearchable
-                    filterOption={filterOptions}
-                />
-                <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
-                <Select
-                    value={selectedOptionAvaliacoes}
-                    onChange={handleChangeAvaliacoes}
-                    options={methods}
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    isSearchable
-                    filterOption={filterOptions}
-                />
-                <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center
+            <div className="pt-[6rem]">
+                <SideBar></SideBar>
+                <div className="mx-auto px-5">
+                    <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[50px]">Escolha os Metodos que
+                        pretende que seja
+                        aplicado:</h1>
+                    <h1 className="mb-3">Métodos para as aulas:</h1>
+                    <Select
+                        value={selectedOptionAulas}
+                        onChange={handleChangeAulas}
+                        options={methodsAulas}
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        isSearchable
+                        filterOption={filterOptions}
+                    />
+                    <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
+                    <Select
+                        value={selectedOptionAvaliacoes}
+                        onChange={handleChangeAvaliacoes}
+                        options={methods}
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        isSearchable
+                        filterOption={filterOptions}
+                    />
+                    <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center
             bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
             ">Criar um horário com estes métodos
-                </button>
-                <ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>
-                <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
+                    </button>
+                    <ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>
+                    <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
+                    <ICalendarLink event={event}>
+                        Add to Calendar
+                    </ICalendarLink>;
+                    <h3>
+                        File Upload using React!
+                    </h3>
+                    <div>
+                        <input type="file" onChange={onFileChange}/>
+                        <button onClick={onFileUpload}>
+                            Upload!
+                        </button>
+                    </div>
+                </div>
             </div>
             <footer
                 className="font-medium bg-blue-100 absolute mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">

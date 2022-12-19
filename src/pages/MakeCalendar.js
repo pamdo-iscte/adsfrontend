@@ -17,6 +17,7 @@ import Modal from 'react-modal';
 import Calendar from './CalendarWithoutNavigator'
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 
 const refCalendar = React.createRef();
 
@@ -197,7 +198,8 @@ function Horario() {
         <div>
            <Header></Header>
 
-            <div className="mx-auto py-[8rem] px-2">
+            <div className="mx-auto py-[6rem] px-2">
+                <SideBar></SideBar>
                 <PopUp></PopUp>
                 <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
                     <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
@@ -211,7 +213,7 @@ function Horario() {
                         className="absolute top-[100px] hover:bg-red-700 right-[170px] bg-amber-500 w-[150px] rounded-full">Guardar
                 </button>
                 <div className="flex flex-row">
-                    <div className="w-3/5">
+                    <div className="w-3/5 pt-6 ml-[]" >
                         {classes === null ? <Spinner></Spinner> : <ReactTabulator
                             data={classes}
                             columns={columns}
@@ -223,7 +225,7 @@ function Horario() {
                         />}
 
                     </div>
-                    <div className="w-2/5">
+                    <div className="w-2/5 pt-6">
                         <Calendar ref={refCalendar}></Calendar>
                     </div>
 
