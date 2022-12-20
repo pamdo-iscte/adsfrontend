@@ -6,7 +6,8 @@ import ServicosAcademicos from './pages/ServiçosAcadémicos'
 import Horario from './pages/Horario'
 import MakeCalendar from './pages/MakeCalendar'
 import Raios from './pages/Raios'
-import StudentTeacher from "./pages/StudentTeacher";
+import StudentTeacherwithAccount from "./pages/StudentTeacherwithAccount";
+import StudentTeacherwithoutAccount from "./pages/StudentTeacherwithoutAccount";
 import MyCalendar from "./pages/MyCalendar";
 import About from "./pages/About";
 export default function App() {
@@ -19,7 +20,8 @@ export default function App() {
                 <Route path="/schedule" element={<Horario/>}/>
                 <Route path="/makecalendar" element={<MakeCalendar/>}/>
                 <Route path="/raios" element={<Raios/>}/>
-                <Route path="/login" element={<StudentTeacher/>}/>
+                <Route path="/login" element={<StudentTeacherwithAccount/>}/>
+                <Route path="/login1" element={<StudentTeacherwithoutAccount/>}/>
                 <Route path="/mycalendar" element={<MyCalendar/>}/>
                 <Route path="/about" element={<About/>}/>
                 <Route path="/*" element={<div>NOT FOUND</div>}/>

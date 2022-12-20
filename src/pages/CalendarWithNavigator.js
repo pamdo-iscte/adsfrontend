@@ -130,7 +130,7 @@ class CalendarWithNavigator extends Component {
                 start: "2022-12-12T08:30:00",
                 end: "2022-12-12T13:00:00",
                 backColor: "#f1c232",
-                sigla: "teu cu"
+                informacao_detalhada: "teste"
             },
             {
                 id: 4,
@@ -138,7 +138,7 @@ class CalendarWithNavigator extends Component {
                 start: "2022-12-13T08:30:00",
                 end: "2022-12-13T13:30:00",
                 backColor: "#f1c232",
-                sigla: "nao"
+                informacao_detalhada: "nao"
             },
         ];
 

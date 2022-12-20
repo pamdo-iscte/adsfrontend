@@ -198,22 +198,18 @@ function Horario() {
         <div>
            <Header></Header>
 
-            <div className="mx-auto py-[6rem] px-2">
+            <div className="mx-auto py-[4rem] px-2">
                 <SideBar></SideBar>
                 <PopUp></PopUp>
-                <button className="lex flex-row  flex justify-center items-center" onClick={returnHome}>
-                    <img className="h-[20px]" src={leftArrow} alt={"Left Arrow"}/>
-                    <p className="ml-[8px] ">Voltar para o Ecrã Principal</p>
-                </button>
                 <button onClick={makeSureResetCalendar}
-                        className="absolute top-[100px] hover:bg-red-700 right-[8px] bg-amber-500 w-[150px] rounded-full">Reset
+                        className="absolute top-[120px] hover:bg-red-700 right-[8px] bg-amber-500 w-[150px] rounded-full">Reset
                     Horário
                 </button>
                 <button onClick={saveHorario}
-                        className="absolute top-[100px] hover:bg-red-700 right-[170px] bg-amber-500 w-[150px] rounded-full">Guardar
+                        className="absolute top-[120px] hover:bg-red-700 right-[170px] bg-amber-500 w-[150px] rounded-full">Guardar
                 </button>
-                <div className="flex flex-row">
-                    <div className="w-3/5 pt-6 ml-[]" >
+                <div className="flex flex-row py-16">
+                    <div className="w-3/5 pt-6" >
                         {classes === null ? <Spinner></Spinner> : <ReactTabulator
                             data={classes}
                             columns={columns}
@@ -233,9 +229,7 @@ function Horario() {
 
             </div>
             <footer
-                className="font-medium bg-blue-100  mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
-                Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
-                por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho
+                className="flex flex-row   flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
             </footer>
         </div>)
 }

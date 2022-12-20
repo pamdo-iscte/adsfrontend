@@ -3,7 +3,7 @@ import {useState} from "react";
 
 import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
-import StudentTeacher from "./StudentTeacher";
+import StudentTeacherwithAccount from "./StudentTeacherwithAccount";
 import HomePage from "./HomePage"
 import ServiçosAcadémicos from "./ServiçosAcadémicos";
 import MakeCalendar from "./MakeCalendar";
@@ -15,7 +15,7 @@ function About() {
     return (
         <div>
             <Header></Header>
-            <div className="mx-auto pt-[6rem]">
+            <div className="mx-auto pt-[4rem]">
                 <SideBar></SideBar>
                 <h1 className="pt-[5rem] text-center"> Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
                     por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho</h1>

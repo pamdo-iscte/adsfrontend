@@ -3,7 +3,7 @@ import {useState} from "react";
 
 import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
-import StudentTeacher from "./StudentTeacher";
+import StudentTeacherwithAccount from "./StudentTeacherwithAccount";
 import HomePage from "./HomePage"
 import ServiçosAcadémicos from "./ServiçosAcadémicos";
 import MakeCalendar from "./MakeCalendar";
@@ -29,13 +29,11 @@ function Home() {
     return (
         <div>
             <Header></Header>
-            <div className="mx-auto pt-[6rem]">
+            <div className="mx-auto pt-[4rem]">
               <SideBar></SideBar>
             </div>
             <footer
                 className="flex flex-row absolute  flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
-                Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
-                por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho
             </footer>
         </div>
 );

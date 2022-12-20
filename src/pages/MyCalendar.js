@@ -5,6 +5,7 @@ import {useNavigate,useLocation} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import CalendarWithNavigator from "./CalendarWithNavigator";
 import SideBar from "../components/SideBar";
+import Header from "../components/Header";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
@@ -55,14 +56,11 @@ function ServiçosAcadémicos() {
 
     return (
         <div>
-            <header
-                className="font-medium p-6 flex flex-row items-center fixed top-0 border-b border-blue-600 h-[5.375rem] w-full bg-blue-100">
-                Novo Fenix
-            </header>
+            <Header></Header>
 
-            <div className="mx-auto pt-[6rem] px-2">
+            <div className="mx-auto pt-[4rem] px-2">
                 <SideBar></SideBar>
-                <div className="pt-[4rem] flex flex-row ...">
+                <div className="pb-[1rem] pt-[4rem] flex flex-row ...">
 
                     <div>
                         <button className="ml-[230px] flex flex-row  flex justify-center items-center hover:bg-red-700 right-[8px] bg-amber-500 w-[200px] rounded-full" onClick={changeCalendar}>
@@ -76,9 +74,7 @@ function ServiçosAcadémicos() {
 
             </div>
             <footer
-                className="font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
-                Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
-                por Pedro d'Oliveira, Diogo Cosme, Inês Carmo e Guilherme Carvalho
+                className="flex flex-row absolute  flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
             </footer>
         </div>)
 }
