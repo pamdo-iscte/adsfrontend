@@ -2,11 +2,15 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import about from '../assets/about.png';
 import home from '../assets/home.png';
+import iscte from '../assets/iscte.png';
 const Spinner = () => {
     const navigate = useNavigate()
 
     const setHomeTrue = () => {
         navigate("/")
+    }
+    const enteriscte = () => {
+        window.open("https://www.iscte-iul.pt/")
     }
 
     const setServiçosTrue = () => {
@@ -72,6 +76,14 @@ const Spinner = () => {
                        <img src={about} className="w-3 h-3 mr-3"/>
                         <span>About</span>
                     </button>
+                </li>
+                <li className="relative">
+                    <img src={iscte} onClick={enteriscte} className="flex items-center text-sm py-4 px-6 h-12
+                    overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300
+                     ease-in-out"
+                            data-mdb-ripple="true" data-mdb-ripple-color="primary">
+
+                    </img>
                 </li>
             </ul>
         </div>
