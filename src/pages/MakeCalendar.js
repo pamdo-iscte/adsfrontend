@@ -45,9 +45,10 @@ function Horario() {
     }
 
     function saveHorario() {
-        const selectedClasses=workloadsTableRef.current.getSelectedData()
-        const body=JSON.stringify({"selectedData":selectedClasses})
-        fetch('/sendselecteddata', {
+        const selectedClasses=refCalendar.current.calendarRef.current.control.events.list
+        const body=JSON.stringify({"slots":selectedClasses,"num":location.state.num})
+        console.log(body)
+        fetch('/saveclasses', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
             body: body
@@ -56,11 +57,11 @@ function Horario() {
                 //console.log(response.status)
                 throw new Error(response.statusText);
             }
-            navigate("/mycalendar", {
-                state: {
-                    num: location.state.num,
-                }
-            })
+            // navigate("/mycalendar", {
+            //     state: {
+            //         num: location.state.num,
+            //     }
+            // })
 
         }).catch((error) => {
             console.error(error);

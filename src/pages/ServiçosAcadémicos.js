@@ -242,7 +242,7 @@ function ServiçosAcadémicos() {
             <div className="pt-[4rem]">
                 <SideBar></SideBar>
                 <div className="mx-auto px-5">
-                    <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[50px]">Escolha os Metodos que
+                    <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[50px]">Escolha os Métodos que
                         pretende que seja
                         aplicado:</h1>
                     <h1 className="mb-3">Métodos para as aulas:</h1>
@@ -271,7 +271,7 @@ function ServiçosAcadémicos() {
             bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
             ">Criar um horário com estes métodos
                     </button>
-                    <ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>
+                    {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
                     <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
                     <ICalendarLink event={event}>
                         Add to Calendar
