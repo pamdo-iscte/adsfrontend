@@ -43,10 +43,13 @@ function Horario() {
     function closeModal() {
         setIsOpen(false);
     }
+    // let teste=["L5205PL05","L5205PL06","L5205PL01"]
+    // teste.map((results) =>
+    //     workloadsTableRef.current.selectRow(workloadsTableRef.current.getRows().filter(row => row.getData().turno === results))
+    // )
 
     function saveHorario() {
-        const selectedClasses=refCalendar.current.calendarRef.current.control.events.list
-        const body=JSON.stringify({"slots":selectedClasses,"num":location.state.num})
+        const body=JSON.stringify({"slots":workloadsTableRef.current.getSelectedData(),"num":location.state.num})
         console.log(body)
         fetch('/saveclasses', {
             method: 'POST',

@@ -22,6 +22,21 @@ function StudentTeacherwithAccount() {
 
     }
     const goTocalendar = () => {
+        let body=JSON.stringify({"file":username})
+        console.log(body)
+        fetch('/fileexists', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+        }).catch((error) => {
+            console.error(error);
+        });
         navigate('/makecalendar', {
             state: {
                 num: username,
