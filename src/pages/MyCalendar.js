@@ -18,6 +18,7 @@ function ServiçosAcadémicos() {
     }
 
     const changeCalendar = () => {
+        console.log( refCalendar.current.calendarRef.current.state)
         navigate('/makecalendar', {
             state: {
                 num: location.state.num,
@@ -26,6 +27,7 @@ function ServiçosAcadémicos() {
         })
     }
     const fetchData = async (body) => {
+        refCalendar.current.calendarRef.current.state=location.state.num
         fetch('/null', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
@@ -41,8 +43,8 @@ function ServiçosAcadémicos() {
         });
     }
     useEffect(() => {
-        console.log(location.state.num)
-        const body = JSON.stringify({"numero": location.state.num});
+        let body=JSON.stringify({"data":refCalendar.current.calendarRef.current.control.startDate.value,"num":location.state.num})
+        console.log(body)
         fetchData(body)
             .then((res) => {
                 res.map((results) =>

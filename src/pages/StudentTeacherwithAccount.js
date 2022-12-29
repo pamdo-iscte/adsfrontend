@@ -12,6 +12,7 @@ function StudentTeacherwithAccount() {
     const [name, setName] = useState(false);
     const [username, setUsername] = useState('')
     const [createAccount, setCreateAccount] = useState(false);
+    const [accountExists,setAccountExists]=useState(true)
     const navigate = useNavigate()
 
 
@@ -22,12 +23,27 @@ function StudentTeacherwithAccount() {
 
     }
     const goTocalendar = () => {
-        navigate('/mycalendar', {
-            state: {
-                num: username,
+        let body=JSON.stringify({"file":username})
+        fetch('/fileexists', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
             }
-
-        })
+            const jsonRes = await response.json()
+            setAccountExists(jsonRes)
+            if(jsonRes){
+                navigate('/mycalendar', {
+                    state: {
+                        num: username,
+                    }
+                })
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     const teste = () => {
@@ -74,6 +90,9 @@ function StudentTeacherwithAccount() {
                             Avançar
                         </p>
                     </button>
+                </div>
+                <div className="flex flex-row  flex justify-center items-center pt-[1rem]">
+                    {!accountExists ? <h1>Uma conta com esse número de utilizador não existe.</h1>: ''}
                 </div>
 
             </div>

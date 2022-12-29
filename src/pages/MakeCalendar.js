@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import {useNavigate,useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import leftArrow from '../assets/leftarrow.svg';
 import 'react-tabulator/lib/styles.css'; // required styles
 //import 'react-tabulator/lib/css/tabulator.min.css'; // theme
@@ -24,7 +24,7 @@ const refCalendar = React.createRef();
 
 function Horario() {
     const [classes, setClasses] = useState(null);
-    const location=useLocation()
+    const location = useLocation()
     const fetchData = async () => {
         const response = await fetch('get_aluno_professor')
         if (!response.ok) {
@@ -43,13 +43,14 @@ function Horario() {
     function closeModal() {
         setIsOpen(false);
     }
+
     // let teste=["L5205PL05","L5205PL06","L5205PL01"]
     // teste.map((results) =>
     //     workloadsTableRef.current.selectRow(workloadsTableRef.current.getRows().filter(row => row.getData().turno === results))
     // )
 
     function saveHorario() {
-        const body=JSON.stringify({"slots":workloadsTableRef.current.getSelectedData(),"num":location.state.num})
+        const body = JSON.stringify({"slots": workloadsTableRef.current.getSelectedData(), "num": location.state.num})
         console.log(body)
         fetch('/saveclasses', {
             method: 'POST',
@@ -72,12 +73,11 @@ function Horario() {
     }
 
     function resetCalendar() {
-        refCalendar.current.calendarRef.current.control.events.list=[]
+        refCalendar.current.calendarRef.current.control.events.list = []
         refCalendar.current.calendarRef.current.control.update()
         window.location.reload(false);
         closeModal()
     }
-
 
 
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -103,8 +103,12 @@ function Horario() {
                             quer dar reset ao seu calendário?
                         </div>
                         <div className="mt-16 flex flex-row flex justify-center items-center">
-                            <button onClick={resetCalendar} className="hover:bg-blue-400 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">SIM</button>
-                            <button onClick={closeModal} className="hover:bg-blue-400 ml-6 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">NÃO</button>
+                            <button onClick={resetCalendar}
+                                    className="hover:bg-blue-400 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">SIM
+                            </button>
+                            <button onClick={closeModal}
+                                    className="hover:bg-blue-400 ml-6 bg-amber-400 w-[60px] rounded-full text-[18px] font-medium">NÃO
+                            </button>
                         </div>
                     </div>
                 </Modal>
@@ -134,11 +138,11 @@ function Horario() {
 
     const handleRowClick = (e, row) => {
         try {
-                        //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
+            //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
             let data = row.getData()
             //console.log(dayOfWeek)
             let body = JSON.stringify({
-                'curso':row.getData().curso,
+                'curso': row.getData().curso,
                 'horas': row.getData().horas,
                 'dias': row.getData().dias,
                 'datas': row.getData().datas,
@@ -200,7 +204,7 @@ function Horario() {
 
     return (
         <div>
-           <Header></Header>
+            <Header></Header>
 
             <div className="mx-auto py-[4rem] px-2">
                 <SideBar></SideBar>
@@ -213,7 +217,7 @@ function Horario() {
                         className="absolute top-[120px] hover:bg-red-700 right-[170px] bg-amber-500 w-[150px] rounded-full">Guardar
                 </button>
                 <div className="flex flex-row py-16">
-                    <div className="w-3/5 pt-6" >
+                    <div className="w-3/5 pt-6">
                         {classes === null ? <Spinner></Spinner> : <ReactTabulator
                             data={classes}
                             columns={columns}

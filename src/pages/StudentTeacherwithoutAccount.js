@@ -12,6 +12,7 @@ function StudentTeacherwithAccount() {
     const [name, setName] = useState(false);
     const [username, setUsername] = useState('')
     const [createAccount, setCreateAccount] = useState(false);
+    const [accountExists,setAccountExists]=useState(false)
     const navigate = useNavigate()
 
 
@@ -33,15 +34,18 @@ function StudentTeacherwithAccount() {
                 throw new Error(response.statusText);
             }
             const jsonRes = await response.json()
-            console.log(jsonRes)
+            setAccountExists(jsonRes)
+            if(!jsonRes){
+                navigate('/makecalendar', {
+                    state: {
+                        num: username,
+                    }
+                })
+            }
         }).catch((error) => {
             console.error(error);
         });
-        navigate('/makecalendar', {
-            state: {
-                num: username,
-            }
-        })
+
     }
 
     const teste = () => {
@@ -89,6 +93,10 @@ function StudentTeacherwithAccount() {
                         </p>
                     </button>
                 </div>
+                <div className="flex flex-row  flex justify-center items-center pt-[1rem]">
+                    {accountExists ? <h1>Uma conta com esse número de utilizador já existe.</h1>: ''}
+                </div>
+
 
             </div>
             <footer
