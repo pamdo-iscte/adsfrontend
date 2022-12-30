@@ -50,7 +50,8 @@ function Horario() {
     // )
 
     function saveHorario() {
-        const body = JSON.stringify({"slots": workloadsTableRef.current.getSelectedData(), "num": location.state.num})
+        const body = JSON.stringify({"slots": refCalendar.current.calendarRef.current.control.events.list,
+            "aulas": workloadsTableRef.current.getSelectedData(), "num": location.state.num})
         console.log(body)
         fetch('/guardar_horario', {
             method: 'POST',

@@ -46,22 +46,11 @@ function StudentTeacherwithAccount() {
         });
     }
 
-    const teste = () => {
-        //fetch("/lei")
-        //  .then((res) => res.json())
-        // .then((data) => console.log(data));
-        navigate('/makecalendar')
-    }
+    const handleChangeNum = event => {
+        const result = event.target.value.replace(/\D/g, '');
+        setUsername(result)
+    };
 
-    const newAccount = () => {
-        setHasAccount(false)
-        setCreateAccount(true)
-        setName(true)
-    }
-    console.log(username)
-    const returnHome = () => {
-        navigate('/')
-    }
 
     return (
         <div>
@@ -75,7 +64,7 @@ function StudentTeacherwithAccount() {
                             className="text-center group-focus-within:text-blue-500 font-serif md:text-[15px] lg:text-[18px] font-normal leading-[22px] text-[dark] mt-3 pb-5">
                             Número de Utilizador
                         </label>
-                        <input onChange={e => setUsername(e.target.value)} name="username"
+                        <input value={username} onChange={handleChangeNum} name="username"
                                className="bg-white mt-[8px] rounded-[8px] w-full text-gray-700 py-3 px-4 mb-[30px] leading-tight border-[1px] focus:outline-none focus:shadow-lg focus:shadow-shadowColor focus:border-b-blue-500"
                                id="grid-first-name" type="text">
                         </input>
