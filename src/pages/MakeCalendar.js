@@ -51,7 +51,7 @@ function Horario() {
     function saveHorario() {
         const body=JSON.stringify({"slots":workloadsTableRef.current.getSelectedData(),"num":location.state.num})
         console.log(body)
-        fetch('/saveclasses', {
+        fetch('/guardar_horario', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
             body: body
