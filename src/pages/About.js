@@ -1,12 +1,5 @@
 import '../../src/App.css';
-import {useState} from "react";
-
-import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
-import StudentTeacherwithAccount from "./StudentTeacherwithAccount";
-import HomePage from "./HomePage"
-import ServiçosAcadémicos from "./ServiçosAcadémicos";
-import MakeCalendar from "./MakeCalendar";
 import SideBar from "../components/SideBar";
 
 function About() {
@@ -17,7 +10,8 @@ function About() {
             <Header></Header>
             <div className="mx-auto pt-[4rem]">
                 <SideBar></SideBar>
-                <h1 className="pt-[5rem] text-center"> Trabalho realizado no ambito da Disciplina de ADS no Mestrado de Engenharia Informática
+                <h1 className="pt-[5rem] text-center"> Trabalho realizado no ambito da Disciplina de ADS no Mestrado de
+                    Engenharia Informática
                     por:</h1>
                 <h2 className="pt-[1rem] text-center">92339 Pedro d'Oliveira, </h2>
                 <h2 className="pt-[1rem] text-center">93028 Diogo Cosme, </h2>

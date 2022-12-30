@@ -25,7 +25,9 @@ class Calendar extends Component {
             onEventClick: async args => {
                 const dp = this.calendar;
                 const modal = await DayPilot.Modal.alert(args.e.text());
-                if (!modal.result) { return; }
+                if (!modal.result) {
+                    return;
+                }
             },
 
 
@@ -84,7 +86,7 @@ class Calendar extends Component {
                         skipMonths={3}
                         startDate={"2023-03-07"}
                         selectionDay={"2023-03-07"}
-                        onTimeRangeSelected={ args => {
+                        onTimeRangeSelected={args => {
                             this.calendar.update({
                                 startDate: args.day
                             });

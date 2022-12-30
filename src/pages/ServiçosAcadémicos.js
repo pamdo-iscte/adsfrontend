@@ -2,12 +2,10 @@ import {useEffect, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import {useNavigate} from 'react-router-dom';
-import leftArrow from '../assets/leftarrow.svg';
 import Header from "../components/Header";
 import {CSVLink, CSVDownload} from "react-csv";
 import ICalendarLink from "react-icalendar-link";
 import SideBar from "../components/SideBar";
-import axios from 'axios';
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
@@ -208,7 +206,7 @@ function ServiçosAcadémicos() {
             }
             const jsonRes = await response.json()
             console.log(jsonRes)
-            if(jsonRes.ok){
+            if (jsonRes.ok) {
                 console.log("FIXE")
             }
         }).catch((error) => {

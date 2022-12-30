@@ -60,20 +60,32 @@ class CalendarWithNavigator extends Component {
         })
         this.calendar.update();
     }
-
     changeEverything = () => {
-        console.log("COCO")
-        let a = this.calendarRef.current.control.startDate.dayOfWeek()
-        let b = this.calendarRef.current.control.startDate.getDay()
-        console.log(a)
-        console.log(b)
-        fetch("/cenas").then(async response => {
+        // let b = this.calendarRef.current.control.startDate.value
+        // console.log(this.calendarRef.current.state)
+        // console.log(b)
+        console.log(this.calendarRef.current.control.events.list)
+        let body = JSON.stringify({
+            "data": this.calendarRef.current.control.startDate.value,
+            "num": this.calendarRef.current.state
+        })
+        console.log(body)
+        fetch('/fileexists', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
             if (response.status !== 200) {
-                //console.log(response.status)
                 throw new Error(response.statusText);
             }
+            const event = {
+                id: 1,
+                text: "Event 1",
+                start: "2022-12-29T10:30:00",
+                end: "2022-12-29T13:00:00"
+            };
+            this.calendarRef.current.control.events.add(event)
             const jsonRes = await response.json()
-            console.log(jsonRes)
 
         }).catch((error) => {
             console.error(error);

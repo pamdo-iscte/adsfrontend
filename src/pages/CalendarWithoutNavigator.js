@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
 import '../../src/App.css';
+
 const styles = {
     wrap: {
         display: "flex"
@@ -12,6 +13,7 @@ const styles = {
         flexGrow: "1"
     }
 };
+
 class CalendarWithoutNavigator extends Component {
     constructor(props) {
         super(props);
@@ -22,15 +24,17 @@ class CalendarWithoutNavigator extends Component {
             heightSpec: "BusinessHoursNoScroll",
             viewType: "Week",
             durationBarVisible: true,
-            theme:"calendar_weekly",
-            locale:"PT-PT",
-            cellHeight:40,
+            theme: "calendar_weekly",
+            locale: "PT-PT",
+            cellHeight: 40,
             onEventClick: async args => {
                 const dp = this.calendar;
-                let zed=args.e.id()
+                let zed = args.e.id()
                 let e = dp.events.find(zed);
                 const modal = await DayPilot.Modal.alert(e.data.informacao_detalhada);
-                if (!modal.result) { return; }
+                if (!modal.result) {
+                    return;
+                }
             },
         };
     }
@@ -41,8 +45,7 @@ class CalendarWithoutNavigator extends Component {
 
     componentDidMount() {
 
-        const events = [
-        ];
+        const events = [];
 
         const startDate = DayPilot.Date.today();
         this.calendar.update({startDate, events});
@@ -75,9 +78,9 @@ class CalendarWithoutNavigator extends Component {
                         {...this.state}
                         headerDateFormat={"dddd"}
                         timeFormat={"Clock24Hours"}
-                        eventMoveHandling ={"Disabled"}
-                        eventResizeHandling ={"Disabled"}
-                        timeRangeSelectedHandling ={"Disabled"}
+                        eventMoveHandling={"Disabled"}
+                        eventResizeHandling={"Disabled"}
+                        timeRangeSelectedHandling={"Disabled"}
                         ref={this.calendarRef}
 
 
