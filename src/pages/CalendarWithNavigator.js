@@ -62,15 +62,17 @@ class CalendarWithNavigator extends Component {
     }
     changeEverything = () => {
         // let b = this.calendarRef.current.control.startDate.value
-        // console.log(this.calendarRef.current.state)
+         console.log(this.calendarRef.current.state)
         // console.log(b)
+        this.calendarRef.current.control.events.list = []
+        this.calendarRef.current.control.update()
         console.log(this.calendarRef.current.control.events.list)
         let body = JSON.stringify({
             "data": this.calendarRef.current.control.startDate.value,
             "num": this.calendarRef.current.state
         })
         console.log(body)
-        fetch('/fileexists', {
+        fetch('/obter_horario_de_uma_semana', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
             body: body
@@ -78,14 +80,11 @@ class CalendarWithNavigator extends Component {
             if (response.status !== 200) {
                 throw new Error(response.statusText);
             }
-            const event = {
-                id: 1,
-                text: "Event 1",
-                start: "2022-12-29T10:30:00",
-                end: "2022-12-29T13:00:00"
-            };
-            this.calendarRef.current.control.events.add(event)
             const jsonRes = await response.json()
+            console.log(jsonRes)
+            jsonRes.map((results) =>
+                this.calendarRef.current.control.events.add(results)
+            )
 
         }).catch((error) => {
             console.error(error);
@@ -123,35 +122,7 @@ class CalendarWithNavigator extends Component {
     componentDidMount() {
 
         const events = [
-            {
-                id: 1,
-                text: "Event 1",
-                start: "2023-03-07T10:30:00",
-                end: "2023-03-07T13:00:00"
-            },
-            {
-                id: 2,
-                text: "Event 2",
-                start: "2023-03-08T09:30:00",
-                end: "2023-03-08T11:30:00",
-                backColor: "#6aa84f"
-            },
-            {
-                id: 3,
-                text: "Event 3",
-                start: "2022-12-12T08:30:00",
-                end: "2022-12-12T13:00:00",
-                backColor: "#f1c232",
-                informacao_detalhada: "teste"
-            },
-            {
-                id: 4,
-                text: "Event 3",
-                start: "2022-12-13T08:30:00",
-                end: "2022-12-13T13:30:00",
-                backColor: "#f1c232",
-                informacao_detalhada: "nao"
-            },
+
         ];
 
         const startDate = DayPilot.Date.today();

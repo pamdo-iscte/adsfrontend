@@ -20,6 +20,42 @@ function ServiçosAcadémicos() {
             "Hey <hey@test.com>",
         ]
     }
+    const [newRequests, setNewRequests] = useState([
+        {
+            title: "My Title",
+            description: "My Description",
+            startTime: "2018-10-07T10:30:00+10:00",
+            endTime: "2018-10-07T12:00:00+10:00",
+            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
+            attendees: [
+                "Hello World <hello@world.com>",
+                "Hey <hey@test.com>",
+            ]
+        },
+        {
+            title: "My Title",
+            description: "My Description",
+            startTime: "2018-10-07T10:30:00+10:00",
+            endTime: "2018-10-07T12:00:00+10:00",
+            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
+            attendees: [
+                "Hello World <hello@world.com>",
+                "Hey <hey@test.com>",
+            ]
+        },
+        {
+            title: "My Title",
+            description: "My Description",
+            startTime: "2018-10-07T10:30:00+10:00",
+            endTime: "2018-10-07T12:00:00+10:00",
+            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
+            attendees: [
+                "Hello World <hello@world.com>",
+                "Hey <hey@test.com>",
+            ]
+        },
+    ])
+
     const animatedComponents = makeAnimated();
     const csvData = [
         ["firstname", "lastname", "email"],
@@ -271,7 +307,7 @@ function ServiçosAcadémicos() {
                     </button>
                     {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
                     <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
-                    <ICalendarLink event={event}>
+                    <ICalendarLink event={newRequests}>
                         Add to Calendar
                     </ICalendarLink>;
                     <h3>

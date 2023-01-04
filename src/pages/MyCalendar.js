@@ -26,34 +26,9 @@ function ServiçosAcadémicos() {
 
         })
     }
-    const fetchData = async (body) => {
-        refCalendar.current.calendarRef.current.state=location.state.num
-        fetch('/null', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json; charset=UTF-8',},
-            body: body
-        }).then(async response => {
-            if (response.status !== 200) {
-                throw new Error(response.statusText);
-            }
-            const jsonRes = await response.json()
-            return jsonRes
-        }).catch((error) => {
-            console.error(error);
-        });
-    }
     useEffect(() => {
-        let body=JSON.stringify({"data":refCalendar.current.calendarRef.current.control.startDate.value,"num":location.state.num})
-        console.log(body)
-        fetchData(body)
-            .then((res) => {
-                res.map((results) =>
-                    refCalendar.current.calendarRef.current.control.events.add(results)
-                )
-            })
-            .catch((e) => {
-                console.log(e.message)
-            })
+        refCalendar.current.calendarRef.current.state=location.state.num
+        console.log( refCalendar.current.calendarRef.current.state)
     }, [])
 
     return (
@@ -76,7 +51,7 @@ function ServiçosAcadémicos() {
 
             </div>
             <footer
-                className="flex flex-row absolute  flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
+                className="flex flex-row flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
             </footer>
         </div>)
 }

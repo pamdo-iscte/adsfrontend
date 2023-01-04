@@ -1,15 +1,12 @@
 import {useEffect, useRef, useState} from "react";
-import Select from "react-select";
-import makeAnimated from 'react-select/animated';
 import {useNavigate, useLocation} from 'react-router-dom';
-import leftArrow from '../assets/leftarrow.svg';
 import 'react-tabulator/lib/styles.css'; // required styles
 //import 'react-tabulator/lib/css/tabulator.min.css'; // theme
 import "tabulator-tables/dist/css/tabulator.min.css"; //import Tabulator stylesheet
 import {ReactTabulator} from 'react-tabulator';
 
 import React, {Component} from 'react';
-import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
+//import {DayPilot, DayPilotCalendar, DayPilotNavigator} from "@daypilot/daypilot-lite-react";
 import '../../src/App.css';
 import Modal from 'react-modal';
 //https://code.daypilot.org/75128/how-to-use-css-themes-with-the-react-scheduler-component
@@ -24,6 +21,7 @@ const refCalendar = React.createRef();
 
 function Horario() {
     const [classes, setClasses] = useState(null);
+    const [selectedclasses, setselectedclasses] = useState(null);
     const location = useLocation()
     const fetchData = async () => {
         const response = await fetch('get_aluno_professor')
@@ -35,23 +33,37 @@ function Horario() {
         }
     }
 
+    const getClassesChosenPreviously = async () => {
+        const body = JSON.stringify({"num": location.state.num})
+        const response = await fetch('/reformular_horario', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        })
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            let res = await response.json()
+            return res
+        }
+    }
+
     const makeSureResetCalendar = async () => {
+        //   workloadsTableRef.current.selectRow(workloadsTableRef.current.getRows().filter(row => row.getData().turno === "L5205PL05"))
         setIsOpen(true)
         //console.log(workloadsTableRef.current.getSelectedData())
     }
+
 
     function closeModal() {
         setIsOpen(false);
     }
 
-    // let teste=["L5205PL05","L5205PL06","L5205PL01"]
-    // teste.map((results) =>
-    //     workloadsTableRef.current.selectRow(workloadsTableRef.current.getRows().filter(row => row.getData().turno === results))
-    // )
-
     function saveHorario() {
-        const body = JSON.stringify({"slots": refCalendar.current.calendarRef.current.control.events.list,
-            "aulas": workloadsTableRef.current.getSelectedData(), "num": location.state.num})
+        const body = JSON.stringify({
+            "slots": refCalendar.current.calendarRef.current.control.events.list,
+            "aulas": workloadsTableRef.current.getSelectedData(), "num": location.state.num
+        })
         console.log(body)
         fetch('/guardar_horario', {
             method: 'POST',
@@ -62,11 +74,11 @@ function Horario() {
                 //console.log(response.status)
                 throw new Error(response.statusText);
             }
-            // navigate("/mycalendar", {
-            //     state: {
-            //         num: location.state.num,
-            //     }
-            // })
+            navigate("/mycalendar", {
+                state: {
+                    num: location.state.num,
+                }
+            })
 
         }).catch((error) => {
             console.error(error);
@@ -74,6 +86,19 @@ function Horario() {
     }
 
     function resetCalendar() {
+        const body = JSON.stringify({"num": location.state.num})
+        fetch('/deleteschedule', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json; charset=UTF-8',},
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                //console.log(response.status)
+                throw new Error(response.statusText);
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
         refCalendar.current.calendarRef.current.control.events.list = []
         refCalendar.current.calendarRef.current.control.update()
         window.location.reload(false);
@@ -125,6 +150,19 @@ function Horario() {
             .catch((e) => {
                 console.log(e.message)
             })
+        getClassesChosenPreviously()
+            .then((res) => {
+                refCalendar.current.calendarRef.current.control.events.list = []
+                refCalendar.current.calendarRef.current.control.update()
+                if(res.length!==0){
+                    res[0].map((results) =>
+                        refCalendar.current.calendarRef.current.control.events.add(results)
+                    )
+                    setselectedclasses(res[1])
+                }
+            }).catch((e) => {
+            console.log(e.message)
+        })
     }, [])
 
 
@@ -184,6 +222,14 @@ function Horario() {
         }
     };
 
+    const addthings = (e, row) => {
+        if (selectedclasses !== null) {
+            console.log(selectedclasses)
+            selectedclasses.map((results) =>
+                workloadsTableRef.current.selectRow(workloadsTableRef.current.getRows().filter(row => row.getData().turno === results))
+            )
+        }
+    };
 
     const workloadsTableOptions = {
         pagination: "local",
@@ -198,9 +244,7 @@ function Horario() {
 
     };
     let workloadsTableRef = useRef();
-    const returnHome = () => {
-        navigate('/')
-    }
+
     const navigate = useNavigate()
 
     return (
@@ -226,7 +270,10 @@ function Horario() {
                             options={workloadsTableOptions}
                             events={{
                                 rowClick: handleRowClick,
+                                tableBuilt: addthings
+
                             }}
+
                         />}
 
                     </div>
