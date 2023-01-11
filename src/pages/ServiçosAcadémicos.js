@@ -484,7 +484,7 @@ function ServiçosAcadémicos() {
                             />
                             <h1 className="mt-3 mb-1">Percentagem de Alunos na Sobrelotação</h1>
                             <input value={num} onChange={handleChangeNum} name="username"
-                                   className="bg-blue-100 mt-[8px] rounded-[8px] w-[100px] text-gray-700 py-3 px-4 mb-[30px] leading-tight border-[1px] focus:outline-none focus:shadow-lg focus:shadow-blue-200 focus:border-b-blue-500"
+                                   className="bg-blue-100 mt-[8px] rounded-[8px] w-[100px] text-gray-700 py-3 px-4 mb-[30px] leading-tight border-[1px] focus:outline-none focus:shadow-lg focus:shadow-shadowColor focus:border-b-blue-500"
                                    id="grid-first-name" type="text">
                             </input>
                             <h1 className="mb-3 mt-1">Métodos para as avaliações:</h1>
@@ -498,9 +498,10 @@ function ServiçosAcadémicos() {
                                 isSearchable
                                 filterOption={filterOptions}
                             />
-                            <button onClick={createHorario} className="mt-[110px] flex flex-row  flex justify-center items-center
-            bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
-            ">Criar um horário com estes métodos
+                            <button disabled={num !== '' ? false : true} onClick={createHorario}className={"bg-transparent text-blue-700 " +
+                                "font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                + (num !== '' ? 'bg-blue-300' : 'bg-gray-400')}>
+            Criar um horário com estes métodos
                             </button>
                         </>
                         : ''}
