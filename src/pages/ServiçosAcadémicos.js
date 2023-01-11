@@ -12,12 +12,26 @@ import {ReactTabulator} from "react-tabulator";
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
     const [classes, setClasses] = useState(null);
+    const [dirHorarios, setDirHorarios] = useState("")
+    const [dirAvaliacao, setDirAvaliacao] = useState("")
+    const [dirCaracterizacao, setDirCaracterizacao] = useState("")
+    const [allFilesExist, setAllFilesExist] = useState(false)
     const columns = [
-        {title: "Curso", field: "curso", width: 150, headerFilter: "input"},
-        {title: "Unidade de execução", field: "unidade_de_execucao", headerFilter: "input"},
-        {title: "Turno", field: "turno", headerFilter: "input"},
-        {title: "Turma", field: "turma", headerFilter: "input"},
-        {title: "Dias da Semana", field: "dias", headerFilter: "input",},
+        {title: "Nome", field: "nome", width: 150, headerFilter: "input"},
+        {title: "Aulas não alocadas", field: "unidade_de_execucao", headerFilter: "input"},
+        {title: "Aulas sobrelotadas", field: "turno", headerFilter: "input"},
+        {title: "Estudantes em sobrelotação", field: "turma", headerFilter: "input"},
+        {title: "Sobrelotação média", field: "dias", headerFilter: "input",},
+        {title: "Lugares desperdiçados ", field: "dias", headerFilter: "input",},
+        {title: "Aulas mal atribuídas", field: "dias", headerFilter: "input",},
+        {title: "Mudanças de Sala", field: "dias", headerFilter: "input",},
+        {title: "Mudanças de Edifício", field: "dias", headerFilter: "input",},
+
+    ];
+    const exams = [
+        {title: "Nome", field: "curso", width: 150, headerFilter: "input"},
+        {title: "Exames Sobrelotados", field: "unidade_de_execucao", headerFilter: "input"},
+        {title: "Lugares desperdiçados ", field: "turno", headerFilter: "input"},
 
     ];
     const handleRowClick = (e, row) => {
@@ -129,7 +143,35 @@ function ServiçosAcadémicos() {
             throw new Error('Data coud not be fetched!')
         } else {
             let res = await response.json()
-            console.log(res)
+            return res
+        }
+    }
+    const seeIfhorarioexists = async () => {
+        const response = await fetch('check_se_existe_horario')
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            let res = await response.json()
+            return res
+        }
+    }
+    const seeIfavaliacaooexists = async () => {
+        const response = await fetch('check_se_existe_avaliacao')
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            let res = await response.json()
+            return res
+        }
+    }
+
+    const checkIfAllFilesExist = async () => {
+        const response = await fetch('check_if_all_files_exist')
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            let res = await response.json()
+            return res
         }
     }
 
@@ -151,7 +193,18 @@ function ServiçosAcadémicos() {
                 console.log(e.message)
             })
         start_main()
-        seeIfcaracterizacaoexists()
+        seeIfcaracterizacaoexists().then((res) => {
+            setDirCaracterizacao(res)
+        })
+        seeIfavaliacaooexists().then((res) => {
+            setDirAvaliacao(res)
+        })
+        seeIfhorarioexists().then((res) => {
+            setDirHorarios(res)
+        })
+        checkIfAllFilesExist().then((res) => {
+            setAllFilesExist(res)
+        })
     }, [])
 
     const filterOptions = (candidate, input) => {
@@ -182,7 +235,7 @@ function ServiçosAcadémicos() {
         selectedOptionAvaliacoes.map((results1) =>
             array1.push(results1.label)
         )
-        const body = JSON.stringify({"aulas": array, "avaliacoes": array1,'checkbox':checked})
+        const body = JSON.stringify({"aulas": array, "avaliacoes": array1, 'checkbox': checked, "num":num})
         console.log(body)
         fetch('/obter_metodos_selecionados', {
             method: 'POST',
@@ -354,7 +407,11 @@ function ServiçosAcadémicos() {
             </label>
         );
     };
-
+    const [num, setNum] = useState('')
+    const handleChangeNum = event => {
+        const result = event.target.value.replace(/\D/g, '');
+        setNum(result)
+    };
 
     return (
         <div>
@@ -362,9 +419,10 @@ function ServiçosAcadémicos() {
             <div className="pt-[4rem]">
                 <SideBar></SideBar>
                 <div className="mx-auto px-5">
-                    <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[50px]">Escolha os Métodos que
+                    <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[10px]">Escolha os Métodos que
                         pretende que seja
                         aplicado:</h1>
+                    <h1 className="text-center font-normal text-[20px] mb-[20px]">Coloque ficheiros .xlsx</h1>
                     <div className="flex flex-row flex flex-row  flex justify-center items-center">
                         <div>
                             <div className="flex  flex-col">
@@ -373,19 +431,22 @@ function ServiçosAcadémicos() {
                                 {selectedAulas !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                                                                   onClick={onFileUploadAulas}>
-                                    Upload!
-                                </button> : ''}
+                                        Upload!
+                                    </button>
+                                    : ''}
+                                {dirHorarios !== "" ? <h1>Já existe o ficheiro: <br/> {dirHorarios}</h1> : ''}
                             </div>
                         </div>
                         <div className="ml-[40px]">
                             <div className="flex  flex-col">
-                                <h1>Avaliacões</h1>
+                                <h1>Avaliações</h1>
                                 <input type="file" onChange={onFileChangeAvaliacoes}/>
                                 {selectedAvaliacoes !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                                                                        onClick={onFileUploadAulas}>
                                     Upload!
                                 </button> : ''}
+                                {dirAvaliacao !== "" ? <h1>Já existe o ficheiro:<br/> {dirAvaliacao}</h1> : ''}
                             </div>
                         </div>
                         <div className="ml-[40px]">
@@ -397,10 +458,12 @@ function ServiçosAcadémicos() {
                                                                            onClick={onFileUploadAulas}>
                                     Upload!
                                 </button> : ''}
+                                {dirCaracterizacao !== "" ?
+                                    <h1>Já existe o ficheiro: <br/> {dirCaracterizacao} </h1> : ''}
                             </div>
                         </div>
                     </div>
-                    {selectedAulas !== null && selectedAvaliacoes !== null && selectedCaracterizacao !== null ?
+                    {allFilesExist ?
                         <>
                             <h1 className="mb-3">Métodos para as aulas:</h1>
                             <Select
@@ -413,7 +476,18 @@ function ServiçosAcadémicos() {
                                 isSearchable
                                 filterOption={filterOptions}
                             />
-                            <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
+                            <h1 className="mt-3 mb-3"></h1>
+                            <Checkbox
+                                label="Menor Distância entre Salas"
+                                value={checked}
+                                onChange={handleChange}
+                            />
+                            <h1 className="mt-3 mb-1">Percentagem de Alunos na Sobrelotação</h1>
+                            <input value={num} onChange={handleChangeNum} name="username"
+                                   className="bg-blue-100 mt-[8px] rounded-[8px] w-[100px] text-gray-700 py-3 px-4 mb-[30px] leading-tight border-[1px] focus:outline-none focus:shadow-lg focus:shadow-blue-200 focus:border-b-blue-500"
+                                   id="grid-first-name" type="text">
+                            </input>
+                            <h1 className="mb-3 mt-1">Métodos para as avaliações:</h1>
                             <Select
                                 value={selectedOptionAvaliacoes}
                                 onChange={handleChangeAvaliacoes}
@@ -424,60 +498,67 @@ function ServiçosAcadémicos() {
                                 isSearchable
                                 filterOption={filterOptions}
                             />
-                            <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center
+                            <button onClick={createHorario} className="mt-[110px] flex flex-row  flex justify-center items-center
             bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
             ">Criar um horário com estes métodos
                             </button>
                         </>
                         : ''}
                     {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
-                    <h1 className="mb-3">Métodos para as aulas:</h1>
-                    <Select
-                        value={selectedOptionAulas}
-                        onChange={handleChangeAulas}
-                        options={methodsAulas}
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        isSearchable
-                        filterOption={filterOptions}
-                    />
-                    <Checkbox
-                        label="Menor Distância entre Salas"
-                        value={checked}
-                        onChange={handleChange}
-                    />
-                    <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
-                    <Select
-                        value={selectedOptionAvaliacoes}
-                        onChange={handleChangeAvaliacoes}
-                        options={methods}
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        isSearchable
-                        filterOption={filterOptions}
-                    />
-                    <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center
-            bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
-            ">Criar um horário com estes métodos
-                    </button>
+                    {/*        <h1 className="mb-3">Métodos para as aulas:</h1>*/}
+                    {/*        <Select*/}
+                    {/*            value={selectedOptionAulas}*/}
+                    {/*            onChange={handleChangeAulas}*/}
+                    {/*            options={methodsAulas}*/}
+                    {/*            closeMenuOnSelect={false}*/}
+                    {/*            components={animatedComponents}*/}
+                    {/*            isMulti*/}
+                    {/*            isSearchable*/}
+                    {/*            filterOption={filterOptions}*/}
+                    {/*        />*/}
+                    {/*        <h1 className="mt-3 mb-3"></h1>*/}
+                    {/*        <Checkbox*/}
+                    {/*            label="Menor Distância entre Salas"*/}
+                    {/*            value={checked}*/}
+                    {/*            onChange={handleChange}*/}
+                    {/*        />*/}
+                    {/*        <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>*/}
+                    {/*        <Select*/}
+                    {/*            value={selectedOptionAvaliacoes}*/}
+                    {/*            onChange={handleChangeAvaliacoes}*/}
+                    {/*            options={methods}*/}
+                    {/*            closeMenuOnSelect={false}*/}
+                    {/*            components={animatedComponents}*/}
+                    {/*            isMulti*/}
+                    {/*            isSearchable*/}
+                    {/*            filterOption={filterOptions}*/}
+                    {/*        />*/}
+                    {/*        <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center*/}
+                    {/*bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded*/}
+                    {/*">Criar um horário com estes métodos*/}
+                    {/*        </button>*/}
 
                     <button onClick={carrega}>CARREGA ME</button>
                     {dataAulas.length !== 0 && dataAvaliacoes.length !== 0 ?
                         <>
                             <div className="flex justify-center items-center">
                                 <div>
-                                    <CSVLink data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
+                                    <CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                             data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
                                 </div>
-                                <div className="ml-[50px]">
+                                <div className="ml-[50px] bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                                     <CSVLink data={dataAvaliacoes} filename="Avaliacoes">Download Avaliacoes</CSVLink>
                                 </div>
 
                             </div>
                         </> : ''}
-                    <CSVLink data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
-                    <Excelexport excelData={dataAulas} filename={"OLA"}></Excelexport>
+                    <h1 className="mt-3 mb-3"></h1>
+                    <CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                             data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
+                    <h1 className="mt-3 mb-3"></h1>
                     <ReactTabulator
                         data={classes}
                         columns={columns}
@@ -488,13 +569,23 @@ function ServiçosAcadémicos() {
                             tableBuilt: addthings
 
                         }}
+                    />
+                    <ReactTabulator
+                        data={classes}
+                        columns={exams}
+                        onRef={(r) => (workloadsTableRef = r)}
+                        options={workloadsTableOptions}
+                        events={{
+                            rowClick: handleRowClick,
+                            tableBuilt: addthings
 
+                        }}
                     />
 
                 </div>
             </div>
             <footer
-                className="flex flex-row absolute  flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
+                className="flex flex-row flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
             </footer>
         </div>)
 }
