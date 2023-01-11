@@ -178,6 +178,7 @@ function Horario() {
     const handleRowClick = (e, row) => {
         try {
             //console.log(refCalendar.current.calendarRef.current.control.startDate.dayOfWeek())
+         //   console.log(workloadsTableRef.current.getSelectedData())
             let data = row.getData()
             //console.log(dayOfWeek)
             let body = JSON.stringify({
@@ -188,7 +189,9 @@ function Horario() {
                 'horas_repetidas': row.getData().horas_repetidas,
                 'turno': row.getData().turno,
                 'unidade_de_execucao': row.getData().unidade_de_execucao,
+                'selecionados':workloadsTableRef.current.getSelectedData,
             })
+            console.log(body)
             // console.log(body)
             fetch('/obter_aulas_da_UC_escolhida', {
                 method: 'POST',

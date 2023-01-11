@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import {useNavigate} from 'react-router-dom';
@@ -6,55 +6,41 @@ import Header from "../components/Header";
 import {CSVLink, CSVDownload} from "react-csv";
 import ICalendarLink from "react-icalendar-link";
 import SideBar from "../components/SideBar";
+import Excelexport from "../components/Excelexport";
+import {ReactTabulator} from "react-tabulator";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
-    const event = {
-        title: "My Title",
-        description: "My Description",
-        startTime: "2018-10-07T10:30:00+10:00",
-        endTime: "2018-10-07T12:00:00+10:00",
-        location: "10 Carlotta St, Artarmon NSW 2064, Australia",
-        attendees: [
-            "Hello World <hello@world.com>",
-            "Hey <hey@test.com>",
-        ]
-    }
-    const [newRequests, setNewRequests] = useState([
-        {
-            title: "My Title",
-            description: "My Description",
-            startTime: "2018-10-07T10:30:00+10:00",
-            endTime: "2018-10-07T12:00:00+10:00",
-            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
-            attendees: [
-                "Hello World <hello@world.com>",
-                "Hey <hey@test.com>",
-            ]
-        },
-        {
-            title: "My Title",
-            description: "My Description",
-            startTime: "2018-10-07T10:30:00+10:00",
-            endTime: "2018-10-07T12:00:00+10:00",
-            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
-            attendees: [
-                "Hello World <hello@world.com>",
-                "Hey <hey@test.com>",
-            ]
-        },
-        {
-            title: "My Title",
-            description: "My Description",
-            startTime: "2018-10-07T10:30:00+10:00",
-            endTime: "2018-10-07T12:00:00+10:00",
-            location: "10 Carlotta St, Artarmon NSW 2064, Australia",
-            attendees: [
-                "Hello World <hello@world.com>",
-                "Hey <hey@test.com>",
-            ]
-        },
-    ])
+    const [classes, setClasses] = useState(null);
+    const columns = [
+        {title: "Curso", field: "curso", width: 150, headerFilter: "input"},
+        {title: "Unidade de execução", field: "unidade_de_execucao", headerFilter: "input"},
+        {title: "Turno", field: "turno", headerFilter: "input"},
+        {title: "Turma", field: "turma", headerFilter: "input"},
+        {title: "Dias da Semana", field: "dias", headerFilter: "input",},
+
+    ];
+    const handleRowClick = (e, row) => {
+
+    };
+
+    const addthings = (e, row) => {
+
+    };
+
+    const workloadsTableOptions = {
+        pagination: "local",
+        paginationSize: 25,
+        paginationSizeSelector: [25, 50, 60],
+        movableColumns: true,
+        //paginationCounter:"rows",
+        rowContextMenu: "rowMenu",
+        paginationButtonCount: 30,
+        groupBy: "unidade_de_execucao",
+        selectable: true,
+
+    };
+    let workloadsTableRef = useRef();
 
     const animatedComponents = makeAnimated();
     const csvData = [
@@ -63,18 +49,14 @@ function ServiçosAcadémicos() {
         ["Raed", "Labes", "rl@smthing.co.com"],
         ["Yezzi", "Min l3b", "ymin@cocococo.com"]
     ];
-    const options = [
 
-        {value: "chocolate", label: "Chocolate"},
-        {value: "strawberry", label: "Strawberry"},
-        {value: "vanilla", label: "Vanilla"},
-        {value: "Apple", label: "apple"},
-        {value: "Orange", label: "orange"}
-    ];
+    const [dataAulas, setDataAulas] = useState([])
+    const [dataAvaliacoes, setDataAvaliacoes] = useState([])
+
     const [methods, setMethodsAvaliation] = useState(null)
     const [methodsAulas, setMethodsAulas] = useState(null)
-    const [selectedOptionAulas, setSelectedOptionAulas] = useState();
-    const [selectedOptionAvaliacoes, setSelectedOptionAvaliacoes] = useState();
+    const [selectedOptionAulas, setSelectedOptionAulas] = useState([]);
+    const [selectedOptionAvaliacoes, setSelectedOptionAvaliacoes] = useState([]);
     const handleChangeAulas = (selectedOption) => {
         setSelectedOptionAulas(selectedOption);
     };
@@ -132,6 +114,25 @@ function ServiçosAcadémicos() {
         );
     };
 
+    const start_main = async () => {
+        const response = await fetch('start_main')
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            console.log(response)
+        }
+    }
+
+    const seeIfcaracterizacaoexists = async () => {
+        const response = await fetch('check_se_existe_caracterizacao_das_salas')
+        if (!response.ok) {
+            throw new Error('Data coud not be fetched!')
+        } else {
+            let res = await response.json()
+            console.log(res)
+        }
+    }
+
     useEffect(() => {
         fetchData()
             .then((res) => {
@@ -149,6 +150,8 @@ function ServiçosAcadémicos() {
             .catch((e) => {
                 console.log(e.message)
             })
+        start_main()
+        seeIfcaracterizacaoexists()
     }, [])
 
     const filterOptions = (candidate, input) => {
@@ -199,18 +202,18 @@ function ServiçosAcadémicos() {
     }
     const fileData = () => {
 
-        if (selected) {
+        if (selectedAulas) {
 
             return (
                 <div>
                     <h2>File Details:</h2>
-                    <p>File Name: {selected.name}</p>
+                    <p>File Name: {selectedAulas.name}</p>
 
-                    <p>File Type: {selected.type}</p>
+                    <p>File Type: {selectedAulas.type}</p>
 
                     <p>
                         Last Modified:{" "}
-                        {selected.toDateString()}
+                        {selectedAulas.toDateString()}
                     </p>
 
                 </div>
@@ -224,16 +227,81 @@ function ServiçosAcadémicos() {
             );
         }
     };
-    const [selected, setSelected] = useState(null)
-    const onFileChange = event => {
+    const [selectedAulas, setSelectedAulas] = useState(null)
+    const [selectedAvaliacoes, setSelectedAvaliacoes] = useState(null)
+    const [selectedCaracterizacao, setSelectedCaracterizacao] = useState(null)
+    const onFileChangeAulas = event => {
+        console.log(event.target.files[0])
+        setSelectedAulas(event.target.files[0]);
 
-        // Update the state
-        setSelected(event.target.files[0]);
-        console.log(selected)
 
     };
-    const ze = async (body) => {
+    const onFileChangeAvaliacoes = event => {
+        setSelectedAvaliacoes(event.target.files[0]);
+
+
+    };
+    const onFileChangeCaracterizacao = event => {
+        setSelectedCaracterizacao(event.target.files[0]);
+
+
+    };
+
+    const carrega = async () => {
+        //let body=JSON.stringify({"filename": "ola"})
+        fetch('/csv', {
+            method: 'POST',
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+            setDataAulas(jsonRes)
+            if (jsonRes.ok) {
+                console.log("FIXE")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    const uploadAulas = async (body) => {
         fetch('/upload', {
+            method: 'POST',
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+            if (jsonRes.ok) {
+                console.log("FIXE")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    const uploadAvaliacoes = async (body) => {
+        fetch('/upload_avaliacoes', {
+            method: 'POST',
+            body: body
+        }).then(async response => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText);
+            }
+            const jsonRes = await response.json()
+            console.log(jsonRes)
+            if (jsonRes.ok) {
+                console.log("FIXE")
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    const uploadCaracterizacao = async (body) => {
+        fetch('/upload_caracterizacao_salas', {
             method: 'POST',
             body: body
         }).then(async response => {
@@ -251,22 +319,27 @@ function ServiçosAcadémicos() {
     }
 
     // On file upload (click the upload button)
-    const onFileUpload = () => {
+    const onFileUploadAulas = () => {
         const data = new FormData()
-        data.append('file', selected)
+        data.append('file', selectedAulas)
         console.log(data)
-        ze(data)
+        uploadAulas(data)
+    };
 
-        //const formData = new FormData();
+    // On file upload (click the upload button)
+    const onFileUploadAvaliacoes = () => {
+        const data = new FormData()
+        data.append('file', selectedAvaliacoes)
+        console.log(data)
+        uploadAvaliacoes(data)
+    };
 
-        // Update the formData object
-
-
-        // Details of the uploaded file
-        // console.log(file.selectedFile);
-
-        // Request made to the backend api
-        // Send formData object
+    // On file upload (click the upload button)
+    const onFileUploadcaracterizacao = () => {
+        const data = new FormData()
+        data.append('file', selectedCaracterizacao)
+        console.log(data)
+        uploadCaracterizacao(data)
     };
 
 
@@ -279,6 +352,72 @@ function ServiçosAcadémicos() {
                     <h1 className="pt-[4rem] text-center font-bold text-[20px] mb-[50px]">Escolha os Métodos que
                         pretende que seja
                         aplicado:</h1>
+                    <div className="flex flex-row flex flex-row  flex justify-center items-center">
+                        <div>
+                            <div className="flex  flex-col">
+                                <h1>Aulas</h1>
+                                <input type="file" onChange={onFileChangeAulas}/>
+                                {selectedAulas !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                                                  onClick={onFileUploadAulas}>
+                                    Upload!
+                                </button> : ''}
+                            </div>
+                        </div>
+                        <div className="ml-[40px]">
+                            <div className="flex  flex-col">
+                                <h1>Avaliacões</h1>
+                                <input type="file" onChange={onFileChangeAvaliacoes}/>
+                                {selectedAvaliacoes !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                                                       onClick={onFileUploadAulas}>
+                                    Upload!
+                                </button> : ''}
+                            </div>
+                        </div>
+                        <div className="ml-[40px]">
+                            <div className="flex  flex-col">
+                                <h1>Caracterização</h1>
+                                <input type="file" onChange={onFileChangeCaracterizacao}/>
+                                {selectedCaracterizacao !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
+                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                                                                           onClick={onFileUploadAulas}>
+                                    Upload!
+                                </button> : ''}
+                            </div>
+                        </div>
+                    </div>
+                    {selectedAulas !== null && selectedAvaliacoes !== null && selectedCaracterizacao !== null ?
+                        <>
+                            <h1 className="mb-3">Métodos para as aulas:</h1>
+                            <Select
+                                value={selectedOptionAulas}
+                                onChange={handleChangeAulas}
+                                options={methodsAulas}
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                isMulti
+                                isSearchable
+                                filterOption={filterOptions}
+                            />
+                            <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
+                            <Select
+                                value={selectedOptionAvaliacoes}
+                                onChange={handleChangeAvaliacoes}
+                                options={methods}
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                isMulti
+                                isSearchable
+                                filterOption={filterOptions}
+                            />
+                            <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center
+            bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
+            ">Criar um horário com estes métodos
+                            </button>
+                        </>
+                        : ''}
+                    {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
                     <h1 className="mb-3">Métodos para as aulas:</h1>
                     <Select
                         value={selectedOptionAulas}
@@ -305,20 +444,35 @@ function ServiçosAcadémicos() {
             bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded
             ">Criar um horário com estes métodos
                     </button>
-                    {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
-                    <CSVLink data={csvData} filename="Horario">Download me</CSVLink>;
-                    <ICalendarLink event={newRequests}>
-                        Add to Calendar
-                    </ICalendarLink>;
-                    <h3>
-                        File Upload using React!
-                    </h3>
-                    <div>
-                        <input type="file" onChange={onFileChange}/>
-                        <button onClick={onFileUpload}>
-                            Upload!
-                        </button>
-                    </div>
+
+                    <button onClick={carrega}>CARREGA ME</button>
+                    {dataAulas.length !== 0 && dataAvaliacoes.length !== 0 ?
+                        <>
+                            <div className="flex justify-center items-center">
+                                <div>
+                                    <CSVLink data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
+                                </div>
+                                <div className="ml-[50px]">
+                                    <CSVLink data={dataAvaliacoes} filename="Avaliacoes">Download Avaliacoes</CSVLink>
+                                </div>
+
+                            </div>
+                        </> : ''}
+                    <CSVLink data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
+                    <Excelexport excelData={dataAulas} filename={"OLA"}></Excelexport>
+                    <ReactTabulator
+                        data={classes}
+                        columns={columns}
+                        onRef={(r) => (workloadsTableRef = r)}
+                        options={workloadsTableOptions}
+                        events={{
+                            rowClick: handleRowClick,
+                            tableBuilt: addthings
+
+                        }}
+
+                    />
+
                 </div>
             </div>
             <footer

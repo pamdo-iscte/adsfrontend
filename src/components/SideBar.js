@@ -4,6 +4,7 @@ import about from '../assets/about.png';
 import home from '../assets/home.png';
 import iscte from '../assets/iscte.png';
 import login from '../assets/login.png';
+import academicServices from '../assets/academicservices.jpg'
 const Spinner = () => {
     const navigate = useNavigate()
 
@@ -40,7 +41,7 @@ const Spinner = () => {
                 <li className="relative">
                     <button onClick={setServiçosTrue} className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out"
                             data-mdb-ripple="true" data-mdb-ripple-color="primary">
-                        <img src={home} className="w-3 h-3 mr-3"/>
+                        <img src={academicServices} className="w-3 h-3 mr-3"/>
                         <span>Serviços Académicos</span>
                     </button>
                 </li>
