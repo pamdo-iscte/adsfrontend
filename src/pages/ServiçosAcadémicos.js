@@ -182,7 +182,7 @@ function ServiçosAcadémicos() {
         selectedOptionAvaliacoes.map((results1) =>
             array1.push(results1.label)
         )
-        const body = JSON.stringify({"aulas": array, "avaliacoes": array1})
+        const body = JSON.stringify({"aulas": array, "avaliacoes": array1,'checkbox':checked})
         console.log(body)
         fetch('/obter_metodos_selecionados', {
             method: 'POST',
@@ -341,6 +341,19 @@ function ServiçosAcadémicos() {
         console.log(data)
         uploadCaracterizacao(data)
     };
+    const [checked, setChecked] = useState(false)
+
+    const handleChange = () => {
+        setChecked(!checked);
+    };
+    const Checkbox = ({label, value, onChange}) => {
+        return (
+            <label>
+                <input type="checkbox" checked={value} onChange={onChange}/>
+                {label}
+            </label>
+        );
+    };
 
 
     return (
@@ -428,6 +441,11 @@ function ServiçosAcadémicos() {
                         isMulti
                         isSearchable
                         filterOption={filterOptions}
+                    />
+                    <Checkbox
+                        label="Menor Distância entre Salas"
+                        value={checked}
+                        onChange={handleChange}
                     />
                     <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>
                     <Select

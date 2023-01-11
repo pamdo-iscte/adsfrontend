@@ -189,7 +189,7 @@ function Horario() {
                 'horas_repetidas': row.getData().horas_repetidas,
                 'turno': row.getData().turno,
                 'unidade_de_execucao': row.getData().unidade_de_execucao,
-                'selecionados':workloadsTableRef.current.getSelectedData,
+                'selecionados':workloadsTableRef.current.getSelectedData(),
             })
             console.log(body)
             // console.log(body)
