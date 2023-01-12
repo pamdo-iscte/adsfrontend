@@ -8,33 +8,45 @@ import ICalendarLink from "react-icalendar-link";
 import SideBar from "../components/SideBar";
 import Excelexport from "../components/Excelexport";
 import {ReactTabulator} from "react-tabulator";
+import Spinner from "../components/Spinner";
 
 function ServiçosAcadémicos() {
     const navigate = useNavigate()
     const [classes, setClasses] = useState(null);
+    const [exms, setExms] = useState(null);
     const [dirHorarios, setDirHorarios] = useState("")
     const [dirAvaliacao, setDirAvaliacao] = useState("")
     const [dirCaracterizacao, setDirCaracterizacao] = useState("")
     const [allFilesExist, setAllFilesExist] = useState(false)
     const columns = [
         {title: "Nome", field: "nome", width: 150, headerFilter: "input"},
-        {title: "Aulas não alocadas", field: "unidade_de_execucao", headerFilter: "input"},
-        {title: "Aulas sobrelotadas", field: "turno", headerFilter: "input"},
-        {title: "Estudantes em sobrelotação", field: "turma", headerFilter: "input"},
-        {title: "Sobrelotação média", field: "dias", headerFilter: "input",},
-        {title: "Lugares desperdiçados ", field: "dias", headerFilter: "input",},
-        {title: "Aulas mal atribuídas", field: "dias", headerFilter: "input",},
-        {title: "Mudanças de Sala", field: "dias", headerFilter: "input",},
-        {title: "Mudanças de Edifício", field: "dias", headerFilter: "input",},
+        {title: "Aulas não alocadas", field: "aulas_nao_alocadas", headerFilter: "input"},
+        {title: "Aulas sobrelotadas", field: "aulas_sobrelotadas", headerFilter: "input"},
+        {title: "Estudantes em sobrelotação", field: "estudantes_em_sobrelotadas", headerFilter: "input"},
+        {title: "Sobrelotação média", field: "sobrelotação_media", headerFilter: "input",},
+        {title: "Lugares desperdiçados ", field: "lugares_desperdicado", headerFilter: "input",},
+        {title: "Aulas mal atribuídas", field: "aulas_mal_atribuidas", headerFilter: "input",},
+        {title: "Mudanças de Sala", field: "mudanca_sala", headerFilter: "input",},
+        {title: "Mudanças de Edifício", field: "mudanca_edificio", headerFilter: "input",},
 
     ];
     const exams = [
-        {title: "Nome", field: "curso", width: 150, headerFilter: "input"},
-        {title: "Exames Sobrelotados", field: "unidade_de_execucao", headerFilter: "input"},
-        {title: "Lugares desperdiçados ", field: "turno", headerFilter: "input"},
+        {title: "Nome", field: "nome", width: 150, headerFilter: "input"},
+        {title: "Exames Sobrelotados", field: "quantidade_lugares_desperdicados_por_avaliacoes", headerFilter: "input"},
+        {title: "Lugares desperdiçados ", field: "quantidade_lugares_desperdicados_por_avaliacoes", headerFilter: "input"},
 
     ];
-    const handleRowClick = (e, row) => {
+    const handleRowClickAulas = (e, row) => {
+        console.log("AQUI")
+        setDataAulas(row.getData().file_aulas)
+
+
+    };
+
+    const handleRowClickAvaliacao = (e, row) => {
+        console.log("AQUI")
+        setDataAvaliacoes(row.getData().file_avaliacoes)
+
 
     };
 
@@ -50,8 +62,8 @@ function ServiçosAcadémicos() {
         //paginationCounter:"rows",
         rowContextMenu: "rowMenu",
         paginationButtonCount: 30,
-        groupBy: "unidade_de_execucao",
-        selectable: true,
+        selectable: 1,
+
 
     };
     let workloadsTableRef = useRef();
@@ -133,7 +145,6 @@ function ServiçosAcadémicos() {
         if (!response.ok) {
             throw new Error('Data coud not be fetched!')
         } else {
-            console.log(response)
         }
     }
 
@@ -227,6 +238,8 @@ function ServiçosAcadémicos() {
         navigate('/')
     }
     const createHorario = () => {
+        setafterPress(true)
+        setClasses(null)
         let array = []
         let array1 = []
         selectedOptionAulas.map((results) =>
@@ -235,8 +248,7 @@ function ServiçosAcadémicos() {
         selectedOptionAvaliacoes.map((results1) =>
             array1.push(results1.label)
         )
-        const body = JSON.stringify({"aulas": array, "avaliacoes": array1, 'checkbox': checked, "num":num})
-        console.log(body)
+        const body = JSON.stringify({"aulas": array, "avaliacoes": array1, 'checkbox': checked, "num": num})
         fetch('/obter_metodos_selecionados', {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8',},
@@ -246,7 +258,9 @@ function ServiçosAcadémicos() {
                 throw new Error(response.statusText);
             }
             const jsonRes = await response.json()
-            return jsonRes
+            console.log(jsonRes)
+            setClasses(jsonRes[0])
+            setExms(jsonRes[1])
         }).catch((error) => {
             console.error(error);
         });
@@ -281,6 +295,7 @@ function ServiçosAcadémicos() {
         }
     };
     const [selectedAulas, setSelectedAulas] = useState(null)
+    const [afterPress, setafterPress] = useState(false)
     const [selectedAvaliacoes, setSelectedAvaliacoes] = useState(null)
     const [selectedCaracterizacao, setSelectedCaracterizacao] = useState(null)
     const onFileChangeAulas = event => {
@@ -413,6 +428,7 @@ function ServiçosAcadémicos() {
         setNum(result)
     };
 
+
     return (
         <div>
             <Header></Header>
@@ -443,7 +459,7 @@ function ServiçosAcadémicos() {
                                 <input type="file" onChange={onFileChangeAvaliacoes}/>
                                 {selectedAvaliacoes !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                                                       onClick={onFileUploadAulas}>
+                                                                       onClick={onFileUploadAvaliacoes}>
                                     Upload!
                                 </button> : ''}
                                 {dirAvaliacao !== "" ? <h1>Já existe o ficheiro:<br/> {dirAvaliacao}</h1> : ''}
@@ -455,7 +471,7 @@ function ServiçosAcadémicos() {
                                 <input type="file" onChange={onFileChangeCaracterizacao}/>
                                 {selectedCaracterizacao !== null ? <button className="bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                                                           onClick={onFileUploadAulas}>
+                                                                           onClick={onFileChangeCaracterizacao}>
                                     Upload!
                                 </button> : ''}
                                 {dirCaracterizacao !== "" ?
@@ -498,96 +514,84 @@ function ServiçosAcadémicos() {
                                 isSearchable
                                 filterOption={filterOptions}
                             />
-                            <button disabled={num !== '' ? false : true} onClick={createHorario}className={"bg-transparent text-blue-700 " +
-                                "font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                + (num !== '' ? 'bg-blue-300' : 'bg-gray-400')}>
-            Criar um horário com estes métodos
+                            <h1 className="mt-3"></h1>
+                            <button
+                                disabled={(selectedOptionAulas.length === 0 || num === '' || selectedOptionAvaliacoes.length === 0) ? true : false}
+                                onClick={createHorario} className={"bg-white text-blue-700 " +
+                                "font-semibold py-2 px-4 border border-blue-500 rounded mt-[25px]"
+                                + (num !== '' ? 'hover:border-transparent hover:text-white hover:bg-blue-500' : '')}>
+                                Criar um horário com estes métodos
                             </button>
                         </>
                         : ''}
-                    {/*<ProgressBar key={1} bgcolor={"#00b3ff"} completed={pBar}/>*/}
-                    {/*        <h1 className="mb-3">Métodos para as aulas:</h1>*/}
-                    {/*        <Select*/}
-                    {/*            value={selectedOptionAulas}*/}
-                    {/*            onChange={handleChangeAulas}*/}
-                    {/*            options={methodsAulas}*/}
-                    {/*            closeMenuOnSelect={false}*/}
-                    {/*            components={animatedComponents}*/}
-                    {/*            isMulti*/}
-                    {/*            isSearchable*/}
-                    {/*            filterOption={filterOptions}*/}
-                    {/*        />*/}
-                    {/*        <h1 className="mt-3 mb-3"></h1>*/}
-                    {/*        <Checkbox*/}
-                    {/*            label="Menor Distância entre Salas"*/}
-                    {/*            value={checked}*/}
-                    {/*            onChange={handleChange}*/}
-                    {/*        />*/}
-                    {/*        <h1 className="mb-3 mt-3">Métodos para as avaliações:</h1>*/}
-                    {/*        <Select*/}
-                    {/*            value={selectedOptionAvaliacoes}*/}
-                    {/*            onChange={handleChangeAvaliacoes}*/}
-                    {/*            options={methods}*/}
-                    {/*            closeMenuOnSelect={false}*/}
-                    {/*            components={animatedComponents}*/}
-                    {/*            isMulti*/}
-                    {/*            isSearchable*/}
-                    {/*            filterOption={filterOptions}*/}
-                    {/*        />*/}
-                    {/*        <button onClick={createHorario} className="mt-[130px] flex flex-row  flex justify-center items-center*/}
-                    {/*bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded*/}
-                    {/*">Criar um horário com estes métodos*/}
-                    {/*        </button>*/}
 
-                    <button onClick={carrega}>CARREGA ME</button>
-                    {dataAulas.length !== 0 && dataAvaliacoes.length !== 0 ?
+                    {/*<button onClick={carrega}>CARREGA ME</button>*/}
+                    {/*<h1 className="mt-3 mb-3"></h1>*/}
+                    {/*<CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700*/}
+                    {/*             font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"*/}
+                    {/*         data={dataAulas} filename="Aulas">Download Aulas</CSVLink>*/}
+                    <h1 className="mt-3 mb-3"></h1>
+                    {afterPress === true ?
                         <>
-                            <div className="flex justify-center items-center">
-                                <div>
-                                    <CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700
+                            {classes === null ? <Spinner></Spinner> :
+                                <>
+                                    <ReactTabulator
+                                        data={classes}
+                                        columns={columns}
+                                        onRef={(r) => (workloadsTableRef = r)}
+                                        options={workloadsTableOptions}
+                                        events={{
+                                            rowClick: handleRowClickAulas,
+                                            tableBuilt: addthings
+
+                                        }}
+                                    />
+                                    <ReactTabulator
+                                        data={exms}
+                                        columns={exams}
+                                        onRef={(r) => (workloadsTableRef = r)}
+                                        options={workloadsTableOptions}
+                                        events={{
+                                            rowClick: handleRowClickAvaliacao,
+                                            tableBuilt: addthings
+
+                                        }}
+                                    />
+
+
+                                    {dataAulas.length !== 0  ?
+                                        <>
+                                            <h1 className="mt-6"></h1>
+                                            <div className="flex justify-center items-center">
+                                                <div>
+                                                    <CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                             data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
-                                </div>
-                                <div className="ml-[50px] bg-transparent hover:bg-blue-500 text-blue-700
+                                                             data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
+                                                </div>
+
+                                            </div>
+                                        </> : ''}
+                                    { dataAvaliacoes.length !== 0 ?
+                                        <>
+                                            <h1 className="mt-6"></h1>
+                                            <div className="flex justify-center items-center">
+                                                <div className="ml-[50px] bg-transparent hover:bg-blue-500 text-blue-700
                                  font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                                    <CSVLink data={dataAvaliacoes} filename="Avaliacoes">Download Avaliacoes</CSVLink>
-                                </div>
+                                                    <CSVLink data={dataAvaliacoes} filename="Avaliacoes">Download
+                                                        Avaliacoes</CSVLink>
+                                                </div>
 
-                            </div>
-                        </> : ''}
-                    <h1 className="mt-3 mb-3"></h1>
-                    <CSVLink className="bg-transparent hover:bg-blue-500 text-blue-700
-                                 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                             data={dataAulas} filename="Aulas">Download Aulas</CSVLink>
-                    <h1 className="mt-3 mb-3"></h1>
-                    <ReactTabulator
-                        data={classes}
-                        columns={columns}
-                        onRef={(r) => (workloadsTableRef = r)}
-                        options={workloadsTableOptions}
-                        events={{
-                            rowClick: handleRowClick,
-                            tableBuilt: addthings
+                                            </div>
+                                        </> : ''}
+                                </>
 
-                        }}
-                    />
-                    <ReactTabulator
-                        data={classes}
-                        columns={exams}
-                        onRef={(r) => (workloadsTableRef = r)}
-                        options={workloadsTableOptions}
-                        events={{
-                            rowClick: handleRowClick,
-                            tableBuilt: addthings
-
-                        }}
-                    />
-
+                            }
+                        </>
+                        : ''}
                 </div>
             </div>
-            <footer
-                className="flex flex-row flex justify-center items-center font-medium bg-blue-100 mx-auto border-t border-blue-600 p-6 flex flex-row items-center bottom-0 right-0 left-0">
-            </footer>
+
+
         </div>)
 }
 
